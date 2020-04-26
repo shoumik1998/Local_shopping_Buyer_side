@@ -7,20 +7,34 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <ListView
-        android:id="@+id/listID"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarID"
+            android:background="#63ace5"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+           style="@style/AppTheme.AppBarOverlay"/>
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:layout_width="match_parent"
+            android:id="@+id/materialSearchID"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
 
-<androidx.recyclerview.widget.RecyclerView
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/recyclerID"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
 
     <ProgressBar
-        android:visibility="gone"
         android:id="@+id/progressBarID"
         android:layout_gravity="center"
         android:layout_width="50dp"

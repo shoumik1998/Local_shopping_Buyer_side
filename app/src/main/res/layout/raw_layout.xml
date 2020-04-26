@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="20dp"
+    android:padding="40dp"
      android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
 
 
         <LinearLayout
+            android:padding="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+            <TextView
+                android:textSize="20dp"
+                android:id="@+id/shopNameID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
             <ImageView
                 android:id="@+id/proIMgID"
                 android:layout_width="120dp"

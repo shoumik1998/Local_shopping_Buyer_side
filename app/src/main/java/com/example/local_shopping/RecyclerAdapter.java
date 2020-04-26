@@ -36,6 +36,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         holder.Name.setText(images_list.get(position).getName());
         holder.Price.setText(images_list.get(position).getPrice());
+        holder.ShopName.setText(images_list.get(position).getShop_Name());
         Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
 
     }
@@ -50,13 +51,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public static class  MyViewHolder extends  RecyclerView.ViewHolder{
         ImageView imageView;
-        TextView Name,Price;
+        TextView Name,Price,ShopName;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView=itemView.findViewById(R.id.proIMgID);
             Name=itemView.findViewById(R.id.proNameID);
             Price=itemView.findViewById(R.id.propriceID);
+            ShopName=itemView.findViewById(R.id.shopNameID);
+
 
         }
 

@@ -13,4 +13,8 @@ public interface ApiInterface {
 
     @GET("location_fetching.php")
     Call<List<Locations>> getLocations(@Query("region") String region);
+
+    @GET("temp_location.php")
+    Call<List<Fetching_produtc_images>> fetch_pro_after_search(@Query("country") String Country,@Query("district") String District,
+                                                               @Query("subdistrict") String Subdistrict,@Query("region") String Region);
 }
