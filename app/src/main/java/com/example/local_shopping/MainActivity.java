@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -41,7 +45,11 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     private Toolbar toolbar;
     private MaterialSearchView materialSearchView;
-    private  String Country,District,Subdistrict,Region;
+    public   String Country,District,Subdistrict,Region;
+    private SharedPreferences sharedPreferences;
+    public  static  MainActivity mainActivity;
+
+
 
 
 
@@ -58,20 +66,18 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         setSupportActionBar(toolbar);
-        fetch_products_images();
+        sharedPreferences =getSharedPreferences("myRegionFile",Context.MODE_PRIVATE);
+        mainActivity=this;
 
+        fetch_products_images();
 
 
     }
 
 
     public  void  fetch_products_images(){
-        Country=getIntent().getStringExtra("country");
-        District=getIntent().getStringExtra("district");
-        Subdistrict=getIntent().getStringExtra("subdistrict");
-        Region=getIntent().getStringExtra("region");
         apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-        if (TextUtils.isEmpty(Country)){
+        if (!read_region_status()){
             Call<List<Fetching_produtc_images>> call=apiInterface.fetching_images(1);
             call.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -83,17 +89,15 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
-
                 }
             });
         }else {
-            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_search(Country,District,Subdistrict,Region);
+            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_search(read_country(),read_district(),read_subdistrict(),read_region());
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
                 public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
@@ -104,9 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
-
                 }
-
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
                     Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public  void  pagenate(){
         apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-        if (TextUtils.isEmpty(Country)){
+        if (!read_region_status()){
             Call<List<Fetching_produtc_images>> call=apiInterface.fetching_images(1);
             call.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -156,8 +158,6 @@ public class MainActivity extends AppCompatActivity {
                     }else {
                         Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
 
                 @Override
@@ -167,15 +167,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }else {
-            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_search(Country,District,Subdistrict,Region);
+            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_search(read_country(),read_district(),read_subdistrict(),read_region());
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
                 public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
 
-                        List<Fetching_produtc_images> new_images=response.body();
+                        List<Fetching_produtc_images> new_images = response.body();
                         adapter.addImages(new_images);
-                    }else {
+                    } else {
                         Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
 
@@ -184,13 +184,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Failed" + t.toString(), Toast.LENGTH_SHORT).show();
 
                 }
             });
         }
-
-
 
     }
 
@@ -257,16 +255,61 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId()==R.id.nextActivityID){
             startActivity(new Intent(MainActivity.this,Location_finder.class));
-            finish();
 
         }
         return false;
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onRestart() {
+        super.onRestart();
+        Country=read_country();
+        District=read_district();
+        Subdistrict=read_subdistrict();
+        Region=read_region();
 
+
+        fetch_products_images();
+        if (Country!=null){
+            Toast.makeText(this, "Data Ase" +Country, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "Data Nai......" +Country, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public  void write_region_name(String Country,String District,String Subdistrict,String Region){
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("country",Country)
+                .putString("district",District)
+                .putString("subdistrict",Subdistrict)
+                .putString("region",Region);
+        editor.commit();
+    }
+
+    public String read_country(){
+        return  sharedPreferences.getString("country", "Country Not Found");
 
     }
+    public String  read_district(){
+        return  sharedPreferences.getString("district","District Not Found");
+    }
+    public String read_subdistrict(){
+return sharedPreferences.getString("subdistrict","subdistrict Not Found");
+    }
+    public  String read_region(){
+        return  sharedPreferences.getString("region","region Not Found");
+    }
+
+    public  void  write_region_status(boolean status){
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("region_status",status);
+        editor.commit();
+    }
+    public  boolean read_region_status(){
+        return sharedPreferences.getBoolean("region_status",false);
+    }
+    public  static  MainActivity getInstance(){
+        return mainActivity;
+    }
+
 }
