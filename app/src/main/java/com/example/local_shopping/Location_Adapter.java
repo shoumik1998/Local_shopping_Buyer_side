@@ -2,6 +2,7 @@ package com.example.local_shopping;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
 
@@ -45,12 +47,13 @@ public class Location_Adapter extends ArrayAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,MainActivity.class);
-                intent.putExtra("country", Country_text.getText().toString());
-                intent.putExtra("district", District_text.getText().toString());
-                intent.putExtra("subdistrict", SubDis_text.getText().toString());
-                intent.putExtra("region",Region_text.getText().toString());
-                context.startActivity(intent);
+                MainActivity.getInstance().write_region_status(true);
+                MainActivity.getInstance().write_region_name(Country_text.getText().toString(),
+                        District_text.getText().toString(),SubDis_text.getText().toString(),
+                        Region_text.getText().toString());
+                MainActivity.getInstance().from_search_act=true;
+                context.startActivity(new Intent(context,MainActivity.class));
+
             }
         });
 

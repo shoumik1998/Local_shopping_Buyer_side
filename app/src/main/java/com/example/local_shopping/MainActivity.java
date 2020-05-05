@@ -1,27 +1,21 @@
 package com.example.local_shopping;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.SearchManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private  RecyclerAdapter adapter;
     private  ApiInterface apiInterface;
     private ProgressBar progressBar;
-    private  int pastVisibleItems,visibleItemCount,totalItemCount,previous_total=0,view_ThreshHold=10;
+    private  int pastVisibleItems=0,visibleItemCount=0,totalItemCount,previous_total=0,view_ThreshHold=10;
     private  boolean isLoading =true;
     Context context;
     private Toolbar toolbar;
@@ -48,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     public   String Country,District,Subdistrict,Region;
     private SharedPreferences sharedPreferences;
     public  static  MainActivity mainActivity;
+    public boolean from_search_act=false;
+    private  String[] array=new String[]{"a","b","c","d"};
+    public  View view;
 
 
 
@@ -57,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         recyclerView=findViewById(R.id.recyclerID);
         progressBar=findViewById(R.id.progressBarID);
@@ -68,6 +68,50 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         sharedPreferences =getSharedPreferences("myRegionFile",Context.MODE_PRIVATE);
         mainActivity=this;
+
+
+        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
+                Call<List<Fetching_produtc_images>> call=apiInterface.getProductName(newText);
+                call.enqueue(new Callback<List<Fetching_produtc_images>>() {
+                    @Override
+                    public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
+                        if (response.isSuccessful()){
+                            materialSearchView.setEllipsize(true);
+                            try {
+
+                            }catch (Exception e){
+                                Toast.makeText(MainActivity.this, "  "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            Toast.makeText(MainActivity.this, "Hmm Response "+response.body().toString(), Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(MainActivity.this, " Response Failed", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
+                        Toast.makeText(MainActivity.this, "Failed To connect", Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+                });
+
+                return false;
+            }
+        });
+
+
 
         fetch_products_images();
 
@@ -86,14 +130,15 @@ public class MainActivity extends AppCompatActivity {
                         images=response.body();
                         adapter=new RecyclerAdapter(images,MainActivity.this);
                         recyclerView.setAdapter(adapter);
+
                     }else {
-                        Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "No response is found", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Failed  to connect"+t.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }else {
@@ -105,13 +150,14 @@ public class MainActivity extends AppCompatActivity {
                         images=response.body();
                         adapter=new RecyclerAdapter(images,MainActivity.this);
                         recyclerView.setAdapter(adapter);
+
                     }else {
-                        Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "No Response is found", Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Failed to connect"+t.toString(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -155,15 +201,11 @@ public class MainActivity extends AppCompatActivity {
 
                         List<Fetching_produtc_images> new_images=response.body();
                         adapter.addImages(new_images);
-                    }else {
-                        Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed"+t.toString(), Toast.LENGTH_SHORT).show();
-
                 }
             });
         }else {
@@ -175,8 +217,6 @@ public class MainActivity extends AppCompatActivity {
 
                         List<Fetching_produtc_images> new_images = response.body();
                         adapter.addImages(new_images);
-                    } else {
-                        Toast.makeText(MainActivity.this, "No", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -184,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed" + t.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Failed to fetch data  " + t.toString(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -195,7 +235,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu,menu);
-        final SearchView searchView=(SearchView) menu.findItem(R.id.searchID).getActionView();
+        MenuItem item=menu.findItem(R.id.searchID);
+        materialSearchView.setMenuItem(item);
+        /*final SearchView searchView=(SearchView) menu.findItem(R.id.searchID).getActionView();
         SearchManager searchManager=(SearchManager)getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
@@ -244,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        });
+        });*/
         return  true;
 
 
@@ -253,28 +295,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId()==R.id.nextActivityID){
-            startActivity(new Intent(MainActivity.this,Location_finder.class));
-
+        switch (item.getItemId()){
+            case R.id.nextActivityID:
+                startActivity(new Intent(MainActivity.this,Location_finder.class));
+            case R.id.searchID:
+                return  true;
+                default:
+         return super.onOptionsItemSelected(item);
         }
-        return false;
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Country=read_country();
-        District=read_district();
-        Subdistrict=read_subdistrict();
-        Region=read_region();
-
-
-        fetch_products_images();
-        if (Country!=null){
-            Toast.makeText(this, "Data Ase" +Country, Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(this, "Data Nai......" +Country, Toast.LENGTH_SHORT).show();
+        if (from_search_act==true){
+            pastVisibleItems=0;
+            visibleItemCount=0;
+            previous_total=0;
+            fetch_products_images();
         }
+
     }
 
     public  void write_region_name(String Country,String District,String Subdistrict,String Region){
@@ -312,4 +352,43 @@ return sharedPreferences.getString("subdistrict","subdistrict Not Found");
         return mainActivity;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (materialSearchView.isSearchOpen()){
+            materialSearchView.closeSearch();
+        }else {
+
+            super.onBackPressed();
+        }
+    }
+
+    public  void  save_and_sharing_task(){
+        AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+        view=getLayoutInflater().inflate(R.layout.share_and_save_dialouge,null,false);
+        Button sharebtn=view.findViewById(R.id.shareID);
+        Button savebtn=view.findViewById(R.id.saveID);
+        builder.setView(view);
+        final AlertDialog dialog=builder.create();
+        dialog.show();
+        sharebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "share  btn is clicked", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
+        savebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "save btn is clicked", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+
+            }
+        });
+        dialog.setCancelable(true);
+
+
+    }
 }
