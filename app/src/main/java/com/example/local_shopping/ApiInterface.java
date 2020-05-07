@@ -17,5 +17,9 @@ public interface ApiInterface {
     Call<List<Fetching_produtc_images>> getProductName(@Query("product_name") String productName);
 
     @GET("temp_location.php")
-    Call<List<Fetching_produtc_images>> fetch_pro_after_search(@Query("country") String Country,@Query("district") String District, @Query("subdistrict") String Subdistrict,@Query("region") String Region);
+    Call<List<Fetching_produtc_images>> fetch_pro_after_location_search(@Query("country") String Country,@Query("district") String District, @Query("subdistrict") String Subdistrict,@Query("region") String Region);
+    @GET("fetching_pro_by_name_specific_region.php")
+    Call<List<Fetching_produtc_images>> fetch_prp_after_product_search(@Query("country") String Country,@Query("district") String District, @Query("subdistrict") String Subdistrict,@Query("region") String Region,
+                                                                       @Query("product_name") String product_name);
+
 }

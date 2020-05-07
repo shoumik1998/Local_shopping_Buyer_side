@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,15 +37,15 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private  int pastVisibleItems=0,visibleItemCount=0,totalItemCount,previous_total=0,view_ThreshHold=10;
     private  boolean isLoading =true;
-    Context context;
     private Toolbar toolbar;
-    private MaterialSearchView materialSearchView;
-    public   String Country,District,Subdistrict,Region;
+
+
     private SharedPreferences sharedPreferences;
     public  static  MainActivity mainActivity;
     public boolean from_search_act=false;
-    private  String[] array=new String[]{"a","b","c","d"};
-    public  View view;
+    public  boolean from_product_search_act=false;
+    public  String parsing_pro_name=null;
+
 
 
 
@@ -61,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.recyclerID);
         progressBar=findViewById(R.id.progressBarID);
         toolbar=findViewById(R.id.toolbarID);
-        materialSearchView=findViewById(R.id.materialSearchID);
+
+
         layoutManager=new GridLayoutManager(this,2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -70,46 +72,11 @@ public class MainActivity extends AppCompatActivity {
         mainActivity=this;
 
 
-        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-                Call<List<Fetching_produtc_images>> call=apiInterface.getProductName(newText);
-                call.enqueue(new Callback<List<Fetching_produtc_images>>() {
-                    @Override
-                    public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
-                        if (response.isSuccessful()){
-                            materialSearchView.setEllipsize(true);
-                            try {
-
-                            }catch (Exception e){
-                                Toast.makeText(MainActivity.this, "  "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                            Toast.makeText(MainActivity.this, "Hmm Response "+response.body().toString(), Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(MainActivity.this, " Response Failed", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                        Toast.makeText(MainActivity.this, "Failed To connect", Toast.LENGTH_SHORT).show();
+        
 
 
 
-                    }
-                });
 
-                return false;
-            }
-        });
 
 
 
@@ -141,8 +108,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Failed  to connect"+t.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
-        }else {
-            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_search(read_country(),read_district(),read_subdistrict(),read_region());
+        }else if (from_product_search_act==true){
+            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),parsing_pro_name);
+
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
                 public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
@@ -161,6 +129,26 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+        }
+        else  if (read_region_status()){
+            Call<List<Fetching_produtc_images>> call2=apiInterface.fetch_pro_after_location_search(read_country(),read_district(),read_subdistrict(),read_region());
+
+            call2.enqueue(new Callback<List<Fetching_produtc_images>>() {
+                @Override
+                public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
+                    if (response.isSuccessful()){
+                        images=response.body();
+                        adapter=new RecyclerAdapter(images,MainActivity.this);
+                        recyclerView.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
+
+                }
+            });
+
         }
 
 
@@ -208,8 +196,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
                 }
             });
-        }else {
-            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_search(read_country(),read_district(),read_subdistrict(),read_region());
+        }else if(from_product_search_act==true) {
+            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),parsing_pro_name);
+
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
                 public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
@@ -228,6 +217,23 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+        }else  if (read_region_status()){
+            Call<List<Fetching_produtc_images>> call2 = apiInterface.fetch_pro_after_location_search(read_country(),read_district(),read_subdistrict(),read_region());
+
+            call2.enqueue(new Callback<List<Fetching_produtc_images>>() {
+                @Override
+                public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
+                    if (response.isSuccessful()){
+                        List<Fetching_produtc_images> new_images=response.body();
+                        adapter.addImages(new_images);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
+
+                }
+            });
         }
 
     }
@@ -235,59 +241,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu,menu);
-        MenuItem item=menu.findItem(R.id.searchID);
-        materialSearchView.setMenuItem(item);
-        /*final SearchView searchView=(SearchView) menu.findItem(R.id.searchID).getActionView();
-        SearchManager searchManager=(SearchManager)getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setQueryHint("search product by name");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
 
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (!TextUtils.isEmpty(newText)) {
-                    apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-                    Call<List<Locations>> call=apiInterface.getLocations(newText);
-                    call.enqueue(new Callback<List<Locations>>() {
-                        @Override
-                        public void onResponse(Call<List<Locations>> call, Response<List<Locations>> response) {
-                            if (response.isSuccessful()) {
-                                if (!TextUtils.isEmpty(response.body().toString())) {
-
-
-
-
-                                }else {
-                                    Toast.makeText(MainActivity.this, "Not Exists", Toast.LENGTH_SHORT).show();
-                                }
-                            }else {
-                                Toast.makeText(MainActivity.this, "Hoi ni", Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Locations>> call, Throwable t) {
-
-                        }
-                    });
-
-                }else {
-                }
-                return false;
-
-
-
-
-            }
-        });*/
-        return  true;
+        return super.onCreateOptionsMenu(menu);
 
 
 
@@ -295,24 +250,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.nextActivityID:
-                startActivity(new Intent(MainActivity.this,Location_finder.class));
-            case R.id.searchID:
-                return  true;
-                default:
-         return super.onOptionsItemSelected(item);
+        if (item.getItemId()==R.id.nextActivityID){
+            startActivity(new Intent(MainActivity.this, Location_finder.class));
+        }else if (item.getItemId()==R.id.searchProByNameID){
+            startActivity(new Intent(MainActivity.this, Product_Finder.class));
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (from_search_act==true){
+        if (from_product_search_act==true){
             pastVisibleItems=0;
             visibleItemCount=0;
             previous_total=0;
             fetch_products_images();
+        }
+        else if (from_search_act==true){
+            pastVisibleItems=0;
+            visibleItemCount=0;
+            previous_total=0;
+            fetch_products_images();
+
+
         }
 
     }
@@ -352,43 +313,6 @@ return sharedPreferences.getString("subdistrict","subdistrict Not Found");
         return mainActivity;
     }
 
-    @Override
-    public void onBackPressed() {
-        if (materialSearchView.isSearchOpen()){
-            materialSearchView.closeSearch();
-        }else {
-
-            super.onBackPressed();
-        }
-    }
-
-    public  void  save_and_sharing_task(){
-        AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
-        view=getLayoutInflater().inflate(R.layout.share_and_save_dialouge,null,false);
-        Button sharebtn=view.findViewById(R.id.shareID);
-        Button savebtn=view.findViewById(R.id.saveID);
-        builder.setView(view);
-        final AlertDialog dialog=builder.create();
-        dialog.show();
-        sharebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "share  btn is clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-
-            }
-        });
-        savebtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "save btn is clicked", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
 
 
-            }
-        });
-        dialog.setCancelable(true);
-
-
-    }
 }

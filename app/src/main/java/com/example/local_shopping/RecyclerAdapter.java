@@ -2,6 +2,10 @@ package com.example.local_shopping;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +21,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+
+import id.zelory.compressor.Compressor;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private List<Fetching_produtc_images> images_list;
     private Context context;
     private  List<Locations> locationsList;
-
+    private FileOutputStream outputStream;
     public RecyclerAdapter(List<Fetching_produtc_images> images, Context context) {
         this.images_list = images;
         this.context = context;
@@ -56,17 +66,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 MainActivity.getInstance().from_search_act=false;
                 context.startActivity(intent);
 
+
+
             }
         });
 
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                    MainActivity.getInstance().save_and_sharing_task();
-
-
-
+                save_and_sharing_task(holder.imageView);
                 return false;
             }
         });
@@ -102,6 +110,63 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             images_list.add(im);
         }
         notifyDataSetChanged();
+    }
+
+
+    public  void  save_and_sharing_task(final ImageView imgView){
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+       View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
+        Button sharebtn=view.findViewById(R.id.shareID);
+        Button savebtn=view.findViewById(R.id.saveID);
+        builder.setView(view);
+        final AlertDialog dialog=builder.create();
+        dialog.show();
+        savebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BitmapDrawable drawable=(BitmapDrawable) imgView.getDrawable();
+                Bitmap bitmap=drawable.getBitmap();
+
+                File filepath= Environment.getExternalStorageDirectory();
+                File dir=new File(filepath.getAbsolutePath()+"/Local_Shopping/");
+                dir.mkdir();
+                File file=new File(dir,System.currentTimeMillis()+".jpg");
+
+                try {
+                    outputStream=new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                try {
+                    outputStream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                Toast.makeText(context, "image  saved ", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        });
+        sharebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "save btn is clicked", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+
+            }
+        });
+        dialog.setCancelable(true);
+
+
     }
 
 }
