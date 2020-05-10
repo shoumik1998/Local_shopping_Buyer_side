@@ -3,8 +3,11 @@ package com.example.local_shopping;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-
-import id.zelory.compressor.Compressor;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private List<Fetching_produtc_images> images_list;
@@ -63,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                         .putExtra("img_path",images_list.get(position).getImage_path())
                         .putExtra("Price",images_list.get(position).getPrice())
                         .putExtra("Product_Name",images_list.get(position).getName());
-                MainActivity.getInstance().from_search_act=false;
+                MainActivity.getInstance().from_location_search_act=false;
                 context.startActivity(intent);
 
 
@@ -116,37 +117,57 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public  void  save_and_sharing_task(final ImageView imgView){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
        View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
-        Button sharebtn=view.findViewById(R.id.shareID);
+        final Button sharebtn=view.findViewById(R.id.shareID);
         Button savebtn=view.findViewById(R.id.saveID);
         builder.setView(view);
+        BitmapDrawable drawable=(BitmapDrawable) imgView.getDrawable();
+        final Bitmap bitmap=drawable.getBitmap();
         final AlertDialog dialog=builder.create();
         dialog.show();
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BitmapDrawable drawable=(BitmapDrawable) imgView.getDrawable();
-                Bitmap bitmap=drawable.getBitmap();
+
 
                 File filepath= Environment.getExternalStorageDirectory();
                 File dir=new File(filepath.getAbsolutePath()+"/Local_Shopping/");
-                dir.mkdir();
+                    dir.mkdir();
+
                 File file=new File(dir,System.currentTimeMillis()+".jpg");
 
                 try {
-                    outputStream=new FileOutputStream(file);
+
+                        outputStream = new FileOutputStream(file);
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                Bitmap newBitmap=Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(),bitmap.getConfig());
+                Canvas canvas=new Canvas(newBitmap);
+                canvas.drawColor(Color.WHITE);
+                canvas.drawBitmap(bitmap,0,0,null);
+
+                    newBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+
                 try {
-                    outputStream.flush();
+                        outputStream.flush();
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 try {
-                    outputStream.close();
+                        outputStream.close();
+
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Toast.makeText(context, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
+                    Intent imageScaner=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri=Uri.fromFile(file);
+                    imageScaner.setData(contentUri);
+                    context.sendBroadcast(imageScaner);
+                }else {
+                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,Uri.parse(String.valueOf(file))));
                 }
 
 

@@ -55,7 +55,7 @@ public class Product_Finder extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(final String newText) {
                 if (!TextUtils.isEmpty(newText)) {
                     apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
                     Call<List<Fetching_produtc_images>> call=apiInterface.getProductName(newText);
@@ -71,10 +71,9 @@ public class Product_Finder extends AppCompatActivity {
                                     listView.setVisibility(View.VISIBLE);
                                     listView.setAdapter(adapter);
 
-                                }else {
-                                    listView.setVisibility(View.GONE);
                                 }
                             }
+
                         }
 
                         @Override
@@ -83,6 +82,8 @@ public class Product_Finder extends AppCompatActivity {
                         }
                     });
 
+                }else {
+                    listView.setVisibility(View.GONE);
                 }
 
 

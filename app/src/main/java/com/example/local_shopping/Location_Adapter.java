@@ -51,7 +51,7 @@ public class Location_Adapter extends ArrayAdapter {
                 MainActivity.getInstance().write_region_name(Country_text.getText().toString(),
                         District_text.getText().toString(),SubDis_text.getText().toString(),
                         Region_text.getText().toString());
-                MainActivity.getInstance().from_search_act=true;
+                MainActivity.getInstance().from_location_search_act=true;
                 context.startActivity(new Intent(context,MainActivity.class));
 
             }
