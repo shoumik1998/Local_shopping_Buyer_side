@@ -327,6 +327,9 @@ public class MainActivity extends AppCompatActivity {
         }else if (item.getItemId()==R.id.searchProByNameID){
             startActivity(new Intent(MainActivity.this, Product_Finder.class));
         }
+        else if (item.getItemId()==R.id.go_to_saved_act_ID){
+            startActivity(new Intent(MainActivity.this,Saved_Activity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 

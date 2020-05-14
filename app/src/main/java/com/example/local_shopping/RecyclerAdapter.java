@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -35,6 +36,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private Context context;
     private  List<Locations> locationsList;
     private FileOutputStream outputStream;
+    private  Uri image_uri;
+
+    private  String product_name;
+    private  String product_price;
+    private  String shop_name;
     public RecyclerAdapter(List<Fetching_produtc_images> images, Context context) {
         this.images_list = images;
         this.context = context;
@@ -50,10 +56,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-
-        holder.Name.setText(images_list.get(position).getName());
-        holder.Price.setText(images_list.get(position).getPrice());
-        holder.ShopName.setText(images_list.get(position).getShop_Name());
+        product_name=images_list.get(position).getName();
+        product_price=images_list.get(position).getPrice();
+        shop_name=images_list.get(position).getShop_Name();
+         holder.Name.setText(product_name);
+        holder.Price.setText(product_price);
+        holder.ShopName.setText(shop_name);
         Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -117,37 +125,41 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public  void  save_and_sharing_task(final ImageView imgView){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
        View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
-        final Button sharebtn=view.findViewById(R.id.shareID);
+         Button sharebtn=view.findViewById(R.id.shareID);
         Button savebtn=view.findViewById(R.id.saveID);
         builder.setView(view);
-        BitmapDrawable drawable=(BitmapDrawable) imgView.getDrawable();
-        final Bitmap bitmap=drawable.getBitmap();
+
         final AlertDialog dialog=builder.create();
         dialog.show();
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                File filepath= Environment.getExternalStorageDirectory();
-                File dir=new File(filepath.getAbsolutePath()+"/Local_Shopping/");
+                File filepath = Environment.getExternalStorageDirectory();
+                File dir = new File(filepath.getAbsolutePath() + "/Local_Shopping/");
+                if (!dir.exists()) {
                     dir.mkdir();
+                }
 
-                File file=new File(dir,System.currentTimeMillis()+".jpg");
+                File file = new File(dir, System.currentTimeMillis() + ".jpg");
 
                 try {
 
-                        outputStream = new FileOutputStream(file);
+                    outputStream = new FileOutputStream(file);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                Bitmap newBitmap=Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(),bitmap.getConfig());
-                Canvas canvas=new Canvas(newBitmap);
-                canvas.drawColor(Color.WHITE);
-                canvas.drawBitmap(bitmap,0,0,null);
 
-                    newBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                BitmapDrawable drawable = (BitmapDrawable) imgView.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                Canvas canvas = new Canvas(newBitmap);
+                canvas.drawColor(Color.WHITE);
+                canvas.drawBitmap(bitmap, 0, 0, null);
+
+                    newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+
 
                 try {
                         outputStream.flush();
@@ -163,12 +175,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 }
                 if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.KITKAT){
                     Intent imageScaner=new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri=Uri.fromFile(file);
-                    imageScaner.setData(contentUri);
+                     image_uri=Uri.fromFile(file);
+                    imageScaner.setData(image_uri);
                     context.sendBroadcast(imageScaner);
+
                 }else {
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,Uri.parse(String.valueOf(file))));
                 }
+                save_product_info(image_uri);
+
 
 
                 Toast.makeText(context, "image  saved ", Toast.LENGTH_SHORT).show();
@@ -189,5 +204,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
     }
+
+    private void save_product_info(final Uri uri) {
+
+
+        class  Save_Product_Info extends AsyncTask<Void,Void,Void>{
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                MainActivity mainActivity=MainActivity.getInstance();
+                Saved_Product_Model model=new Saved_Product_Model(product_name,shop_name,
+                        mainActivity.read_region(),product_price,uri.toString());
+
+                Database_Client.getInstance(context).getAppDatabase().saved_pro_dao()
+                        .insert_product(model);
+
+                return null;
+            }
+
+        }
+        Save_Product_Info product_info=new Save_Product_Info();
+        product_info.execute();
+        Toast.makeText(context, "bachground.....", Toast.LENGTH_SHORT).show();
+
+    }
+
+
 
 }
