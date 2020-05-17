@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.example.local_shopping"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -20,6 +20,8 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.github.mohammadatif:Animatoo:master'
 
     def room_version = "1.1.1"
     implementation "android.arch.persistence.room:runtime:$room_version"

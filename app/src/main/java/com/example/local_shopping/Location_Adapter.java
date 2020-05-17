@@ -1,5 +1,6 @@
 package com.example.local_shopping;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class Location_Adapter extends ArrayAdapter {
                         Region_text.getText().toString());
                 MainActivity.getInstance().from_location_search_act=true;
                 context.startActivity(new Intent(context,MainActivity.class));
+                ((Activity)context).finish();
 
             }
         });

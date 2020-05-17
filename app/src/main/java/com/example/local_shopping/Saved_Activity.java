@@ -53,8 +53,6 @@ public class Saved_Activity extends AppCompatActivity {
 
                 Saved_Product_Adapter adapter=new Saved_Product_Adapter(Saved_Activity.this,saved_product_models);
                 saved_pro_recyclerview.setAdapter(adapter);
-                Toast.makeText(Saved_Activity.this, "hmmmm", Toast.LENGTH_SHORT).show();
-
             }
         }
 
