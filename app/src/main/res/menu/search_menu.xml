@@ -3,21 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:title=" "
         app:showAsAction="ifRoom|collapseActionView"
         android:id="@+id/pro_finder_searchID"
         android:icon="@android:drawable/ic_search_category_default"
-        android:title="search_pro_by_name"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
-
-
     <item
         app:showAsAction="never"
         android:id="@+id/nextActivityID"
         android:title="set desired shop region" />
-    <item
-        app:showAsAction="never"
-        android:id="@+id/searchProByNameID"
-        android:title="Search product by name" />
     <item
         app:showAsAction="never"
         android:id="@+id/go_to_saved_act_ID"

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#c0d6e4"
     tools:context=".Location_finder">
 
     <FrameLayout
@@ -12,18 +13,18 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
+            app:title="Search Shop Location "
             android:background="#63ace5"
             android:id="@+id/toolbarID_location"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
 
-
-
     </FrameLayout>
 
     <ListView
+        android:layout_margin="10dp"
         android:id="@+id/locationList_ID"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

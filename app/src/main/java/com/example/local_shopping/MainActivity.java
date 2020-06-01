@@ -1,7 +1,6 @@
 package com.example.local_shopping;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -14,16 +13,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
 
@@ -72,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         sharedPreferences =getSharedPreferences("myRegionFile",Context.MODE_PRIVATE);
         mainActivity=this;
 
@@ -267,13 +263,12 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String query) {
-                if (query.length()>0){
+                if (query.length()>2){
                     pastVisibleItems=0;
                     visibleItemCount=0;
                     previous_total=0;
                     progressBar.setVisibility(View.VISIBLE);
                     from_product_search_act=true;
-                    Toast.makeText(MainActivity.this, "hmmmmmm", Toast.LENGTH_SHORT).show();
                     apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
                      Call<List<Fetching_produtc_images>> product_call=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
                     product_call.enqueue(new Callback<List<Fetching_produtc_images>>() {
@@ -297,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }else {
                     from_product_search_act=false;
-                    Toast.makeText(MainActivity.this, "type more than 3 letter then search", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "type minimum 3 letter then search", Toast.LENGTH_SHORT).show();
                 }
 
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -345,8 +340,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId()==R.id.nextActivityID){
             startActivity(new Intent(MainActivity.this, Location_finder.class));
-        }else if (item.getItemId()==R.id.searchProByNameID){
-            startActivity(new Intent(MainActivity.this, Product_Finder.class));
         }
         else if (item.getItemId()==R.id.go_to_saved_act_ID){
             startActivity(new Intent(MainActivity.this,Saved_Activity.class));
@@ -422,4 +415,6 @@ return sharedPreferences.getString("subdistrict","subdistrict Not Found");
 
 
     }
+
+
 }

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -83,8 +84,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                save_and_sharing_task(holder.imageView);
+                save_and_sharing_task(holder.imageView,holder.Name.getText().toString(),holder.Price.getText().toString());
                 return false;
+            }
+        });
+
+        holder.ShopName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,Visit_Shop.class);
+                intent.putExtra("userName",images_list.get(position).getUser_Name());
+                intent.putExtra("shopName",images_list.get(position).getShop_Name());
+                context.startActivity(intent);
+
+
             }
         });
 
@@ -122,11 +135,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
 
-    public  void  save_and_sharing_task(final ImageView imgView){
+    public  void  save_and_sharing_task(final ImageView imgView, final String pro_name, final String pro_price){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
        View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
-         Button sharebtn=view.findViewById(R.id.shareID);
-        Button savebtn=view.findViewById(R.id.saveID);
+         TextView sharebtn=view.findViewById(R.id.shareID);
+        TextView savebtn=view.findViewById(R.id.saveID);
         builder.setView(view);
 
         final AlertDialog dialog=builder.create();
@@ -194,7 +207,37 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         sharebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "save btn is clicked", Toast.LENGTH_SHORT).show();
+                BitmapDrawable drawable = (BitmapDrawable) imgView.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+                Canvas canvas = new Canvas(newBitmap);
+                canvas.drawColor(Color.WHITE);
+                canvas.drawBitmap(bitmap, 0, 0, null);
+                File file=new File(context.getExternalCacheDir(),"background.jpeg");
+                try {
+                    FileOutputStream fout=new FileOutputStream(file);
+                    newBitmap.compress(Bitmap.CompressFormat.JPEG,100,fout);
+                    fout.flush();
+                    fout.close();
+                    file.setReadable(true,false);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                Intent intent=new Intent(android.content.Intent.ACTION_SEND);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(file));
+
+                intent.putExtra(Intent.EXTRA_TEXT,pro_name);
+                intent.setType("image/jpeg");
+
+
+                context.startActivity(Intent.createChooser(intent, "Share Via : "));
+
                 dialog.dismiss();
 
 
@@ -225,7 +268,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         }
         Save_Product_Info product_info=new Save_Product_Info();
         product_info.execute();
-        Toast.makeText(context, "bachground.....", Toast.LENGTH_SHORT).show();
 
     }
 

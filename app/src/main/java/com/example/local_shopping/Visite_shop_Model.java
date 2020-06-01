@@ -2,46 +2,27 @@ package com.example.local_shopping;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Fetching_produtc_images {
+public class Visite_shop_Model {
 
-    @SerializedName("user_name")
-    String User_Name;
-    @SerializedName("shop_name")
-    String Shop_Name;
     @SerializedName("name")
     String Name;
     @SerializedName("image_path")
-    String Image_path;
+    String Image_Path;
     @SerializedName("price")
     String Price;
-    @SerializedName("id")
-    int Id;
-
     @SerializedName("response")
     String Response;
 
-
-    public  String getUser_Name(){
-        return User_Name;
-    }
     public String getName() {
         return Name;
     }
 
-    public String getImage_path() {
-        return Image_path;
+    public String getImage_Path() {
+        return Image_Path;
     }
 
     public String getPrice() {
         return Price;
-    }
-
-    public String getShop_Name() {
-        return Shop_Name;
-    }
-
-    public int getId() {
-        return Id;
     }
 
     public String getResponse() {

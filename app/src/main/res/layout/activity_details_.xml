@@ -4,10 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:weightSum="6"
+    android:padding="4dp"
+   android:background="@drawable/details_back"
     android:layout_height="match_parent"
     tools:context=".Details_Activity">
 
     <ImageView
+        android:layout_weight="5"
         android:id="@+id/datils_image_id"
         android:layout_width="match_parent"
         android:layout_height="160dp"/>
@@ -16,10 +20,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="#800000"
             android:text="Country : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_country_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -30,10 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="#800000"
             android:text="District : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_district_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -44,10 +52,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="#800000"
             android:text="sub District : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_subdistrict_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -58,10 +68,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="#800000"
             android:text="Region  : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_region_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -72,10 +84,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:textColor="#800000"
             android:text="Shop Name : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_shopName_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -87,11 +101,13 @@
         android:orientation="horizontal">
 
         <TextView
+            android:textColor="#800000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Shop Location  : " />
 
         <TextView
+            android:textColor="#ff0000"
             android:id="@+id/details_Shop_Location_text_DI"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -103,11 +119,13 @@
             android:orientation="horizontal">
 
             <TextView
+                android:textColor="#800000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shop Location  : " />
+                android:text="Product Name  : " />
 
             <TextView
+                android:textColor="#ff0000"
                 android:id="@+id/details_product_Name_text_DI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -119,11 +137,13 @@
             android:orientation="horizontal">
 
             <TextView
+                android:textColor="#800000"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Price  : " />
 
             <TextView
+                android:textColor="#ff0000"
                 android:id="@+id/details_product_price_text_DI"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

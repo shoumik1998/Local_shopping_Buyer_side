@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="40dp"
+    android:padding="20dp"
     android:id="@+id/parentCardID"
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
+    android:layout_margin="10dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
         <LinearLayout
-            android:padding="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
+                android:textColor="#ff198d"
                 android:textSize="20dp"
                 android:id="@+id/shopNameID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <ImageView
                 android:id="@+id/proIMgID"
-                android:layout_width="120dp"
-                android:layout_height="140dp" />
+                android:layout_width="150dp"
+                android:layout_height="160dp" />
             <TextView
+                android:textColor="#357c5e"
                 android:id="@+id/proNameID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
+                android:textColor="#4f58ee"
                 android:id="@+id/propriceID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

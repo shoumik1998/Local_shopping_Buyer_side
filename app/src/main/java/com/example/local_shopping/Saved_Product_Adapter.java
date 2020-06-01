@@ -52,16 +52,7 @@ public class Saved_Product_Adapter extends RecyclerView.Adapter<Saved_Product_Ad
             Toast.makeText(context, "Image Named "+saved_list.get(position).getSaved_pro_name()+"Is Not Found", Toast.LENGTH_SHORT).show();
         }
 
-        holder.saved_imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context,Full_Screen_Pro.class);
-                intent.putExtra("full_img_uri",saved_list.get(position).getsImageUri());
-                context.startActivity(intent);
-                Animatoo.animateZoom(context);
 
-            }
-        });
 
     }
 
@@ -112,7 +103,18 @@ public class Saved_Product_Adapter extends RecyclerView.Adapter<Saved_Product_Ad
             saved_pro_shop_name_text=itemView.findViewById(R.id.saved_shop_name_ID);
             saved_pro_region_text=itemView.findViewById(R.id.saved_region_ID);
 
-            saved_imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(context,Full_Screen_Pro.class);
+                    intent.putExtra("full_img_uri",saved_list.get(getAdapterPosition()).getsImageUri());
+                    context.startActivity(intent);
+                    Animatoo.animateZoom(context);
+
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     AlertDialog.Builder builder=new AlertDialog.Builder(context);

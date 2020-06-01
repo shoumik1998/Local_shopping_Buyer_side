@@ -5,11 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#c0d6e4"
-    tools:context=".Saved_Activity">
+    android:layout_gravity="center"
+    tools:context=".Visit_Shop">
+
+    <TextView
+        android:gravity="center"
+        android:textSize="40dp"
+        android:id="@+id/visit_textID"
+        android:textColor="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/saved_act_recycler_ID"
+        android:id="@+id/shop_visit_recyclerVID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

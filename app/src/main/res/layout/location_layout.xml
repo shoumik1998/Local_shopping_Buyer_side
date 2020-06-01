@@ -1,46 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    android:background="#b6fcd5"
+    android:padding="10dp"
+    android:layout_margin="20dp"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:text="Bheramara"
-        android:textSize="30dp"
-        android:id="@+id/regionID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="3">
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/countryID"
+            android:textColor="#f7347a"
+            android:text="Bheramara"
+            android:textSize="30dp"
+            android:id="@+id/regionID"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="Bangladesh" />
+            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/districtID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="Kushtia" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-        <TextView
-            android:id="@+id/subdistrictID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:text="Bheramara" />
+            <TextView
+                android:textColor="#660066"
+                android:id="@+id/countryID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Bangladesh" />
 
+            <TextView
+                android:textColor="#660066"
+                android:id="@+id/districtID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Kushtia" />
+
+            <TextView
+                android:textColor="#660066"
+                android:id="@+id/subdistrictID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="Bheramara" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
