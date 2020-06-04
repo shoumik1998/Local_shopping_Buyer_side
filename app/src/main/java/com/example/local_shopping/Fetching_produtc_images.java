@@ -16,9 +16,10 @@ public class Fetching_produtc_images {
     String Price;
     @SerializedName("id")
     int Id;
-
     @SerializedName("response")
     String Response;
+    @SerializedName("currency")
+    String Crrency;
 
 
     public  String getUser_Name(){
@@ -42,6 +43,10 @@ public class Fetching_produtc_images {
 
     public int getId() {
         return Id;
+    }
+
+    public String getCrrency() {
+        return Crrency;
     }
 
     public String getResponse() {

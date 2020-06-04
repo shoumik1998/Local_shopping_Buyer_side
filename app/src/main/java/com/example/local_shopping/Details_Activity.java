@@ -35,7 +35,7 @@ public class Details_Activity extends AppCompatActivity {
         Region_Text.setText(MainActivity.getInstance().read_region());
         Shop_Name_Text.setText(getIntent().getStringExtra("ShopName"));
         Product_Name_text.setText(getIntent().getStringExtra("Product_Name"));
-        Product_price_text.setText(getIntent().getStringExtra("Price"));
+        Product_price_text.setText(getIntent().getStringExtra("Price")+" "+getIntent().getStringExtra("currency"));
 
 
 

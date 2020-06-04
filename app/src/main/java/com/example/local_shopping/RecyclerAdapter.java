@@ -42,6 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private  String product_name;
     private  String product_price;
     private  String shop_name;
+    private  String currency;
     public RecyclerAdapter(List<Fetching_produtc_images> images, Context context) {
         this.images_list = images;
         this.context = context;
@@ -60,8 +61,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         product_name=images_list.get(position).getName();
         product_price=images_list.get(position).getPrice();
         shop_name=images_list.get(position).getShop_Name();
+        currency=images_list.get(position).getCrrency();
          holder.Name.setText(product_name);
-        holder.Price.setText(product_price);
+        holder.Price.setText(product_price+" "+currency);
         holder.ShopName.setText(shop_name);
         Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
 
@@ -72,6 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 intent.putExtra("ShopName",images_list.get(position).getShop_Name())
                         .putExtra("img_path",images_list.get(position).getImage_path())
                         .putExtra("Price",images_list.get(position).getPrice())
+                        .putExtra("currency",currency)
                         .putExtra("Product_Name",images_list.get(position).getName());
                 MainActivity.getInstance().from_location_search_act=false;
                 context.startActivity(intent);
@@ -195,11 +198,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 }else {
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,Uri.parse(String.valueOf(file))));
                 }
-                save_product_info(image_uri);
-
-
-
-                Toast.makeText(context, "image  saved ", Toast.LENGTH_SHORT).show();
+                save_product_info(image_uri,pro_name,pro_price);
                 dialog.dismiss();
 
             }
@@ -248,7 +247,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     }
 
-    private void save_product_info(final Uri uri) {
+    private void save_product_info(final Uri uri, final String sproduct_name, final String sproduct_price) {
 
 
         class  Save_Product_Info extends AsyncTask<Void,Void,Void>{
@@ -256,8 +255,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             @Override
             protected Void doInBackground(Void... voids) {
                 MainActivity mainActivity=MainActivity.getInstance();
-                Saved_Product_Model model=new Saved_Product_Model(product_name,shop_name,
-                        mainActivity.read_region(),product_price,uri.toString());
+                Saved_Product_Model model=new Saved_Product_Model(sproduct_name,shop_name,
+                        mainActivity.read_region(),sproduct_price,uri.toString());
 
                 Database_Client.getInstance(context).getAppDatabase().saved_pro_dao()
                         .insert_product(model);
@@ -268,6 +267,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         }
         Save_Product_Info product_info=new Save_Product_Info();
         product_info.execute();
+        Toast.makeText(context, sproduct_name+" saved ", Toast.LENGTH_SHORT).show();
 
     }
 
