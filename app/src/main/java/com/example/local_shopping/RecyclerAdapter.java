@@ -23,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;
@@ -35,14 +36,13 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private List<Fetching_produtc_images> images_list;
     private Context context;
-    private  List<Locations> locationsList;
     private FileOutputStream outputStream;
     private  Uri image_uri;
 
     private  String product_name;
     private  String product_price;
     private  String shop_name;
-    private  String currency;
+
     public RecyclerAdapter(List<Fetching_produtc_images> images, Context context) {
         this.images_list = images;
         this.context = context;
@@ -61,7 +61,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         product_name=images_list.get(position).getName();
         product_price=images_list.get(position).getPrice();
         shop_name=images_list.get(position).getShop_Name();
-        currency=images_list.get(position).getCrrency();
+       final String currency=images_list.get(position).getCrrency();
+        final String location=images_list.get(position).getLocation();
          holder.Name.setText(product_name);
         holder.Price.setText(product_price+" "+currency);
         holder.ShopName.setText(shop_name);
@@ -75,6 +76,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                         .putExtra("img_path",images_list.get(position).getImage_path())
                         .putExtra("Price",images_list.get(position).getPrice())
                         .putExtra("currency",currency)
+                        .putExtra("Location",location)
                         .putExtra("Product_Name",images_list.get(position).getName());
                 MainActivity.getInstance().from_location_search_act=false;
                 context.startActivity(intent);
@@ -87,7 +89,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                save_and_sharing_task(holder.imageView,holder.Name.getText().toString(),holder.Price.getText().toString());
+                save_and_sharing_task(holder.imageView,holder.Name.getText().toString(),holder.Price.getText().toString()
+                        ,images_list.get(position).getCrrency(),images_list.get(position).getLocation());
                 return false;
             }
         });
@@ -99,6 +102,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 intent.putExtra("userName",images_list.get(position).getUser_Name());
                 intent.putExtra("shopName",images_list.get(position).getShop_Name());
                 context.startActivity(intent);
+                Animatoo.animateWindmill(context);
 
 
             }
@@ -138,7 +142,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
 
-    public  void  save_and_sharing_task(final ImageView imgView, final String pro_name, final String pro_price){
+    public  void  save_and_sharing_task(final ImageView imgView, final String pro_name, final String pro_price,final String currency,final  String location){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
        View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
          TextView sharebtn=view.findViewById(R.id.shareID);
@@ -198,7 +202,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 }else {
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,Uri.parse(String.valueOf(file))));
                 }
-                save_product_info(image_uri,pro_name,pro_price);
+                save_product_info(image_uri,pro_name,pro_price,currency,location);
                 dialog.dismiss();
 
             }
@@ -247,7 +251,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     }
 
-    private void save_product_info(final Uri uri, final String sproduct_name, final String sproduct_price) {
+    private void save_product_info(final Uri uri, final String sproduct_name, final String sproduct_price,final String sCurrency,final  String sShop_location) {
 
 
         class  Save_Product_Info extends AsyncTask<Void,Void,Void>{
@@ -256,7 +260,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             protected Void doInBackground(Void... voids) {
                 MainActivity mainActivity=MainActivity.getInstance();
                 Saved_Product_Model model=new Saved_Product_Model(sproduct_name,shop_name,
-                        mainActivity.read_region(),sproduct_price,uri.toString());
+                        mainActivity.read_region(),sproduct_price,uri.toString(),sCurrency,sShop_location);
 
                 Database_Client.getInstance(context).getAppDatabase().saved_pro_dao()
                         .insert_product(model);

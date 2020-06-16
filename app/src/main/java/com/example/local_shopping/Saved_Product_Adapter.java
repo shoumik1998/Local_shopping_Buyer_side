@@ -46,6 +46,7 @@ public class Saved_Product_Adapter extends RecyclerView.Adapter<Saved_Product_Ad
         holder.saved_pro_price_text.setText(saved_list.get(position).getSaved_pro_price());
         holder.saved_pro_shop_name_text.setText(saved_list.get(position).getSaved_pro_shop_name());
         holder.saved_pro_region_text.setText(saved_list.get(position).getSaved_pro_region());
+        holder.saved_pro_location_text.setText(saved_list.get(position).getSaved_shop_location());
         if (saved_list.get(position).getsImageUri()!=null) {
             Glide.with(context).load(Uri.parse(saved_list.get(position).getsImageUri())).into(holder.saved_imageView);
         }else {
@@ -93,7 +94,7 @@ public class Saved_Product_Adapter extends RecyclerView.Adapter<Saved_Product_Ad
 
     public  class  MySavedViewHolder extends RecyclerView.ViewHolder{
         ImageView saved_imageView;
-        TextView saved_pro_name_text,saved_pro_price_text,saved_pro_shop_name_text,saved_pro_region_text;
+        TextView saved_pro_name_text,saved_pro_price_text,saved_pro_shop_name_text,saved_pro_region_text,saved_pro_location_text;
 
         public MySavedViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +103,7 @@ public class Saved_Product_Adapter extends RecyclerView.Adapter<Saved_Product_Ad
             saved_pro_price_text=itemView.findViewById(R.id.saved_price_ID);
             saved_pro_shop_name_text=itemView.findViewById(R.id.saved_shop_name_ID);
             saved_pro_region_text=itemView.findViewById(R.id.saved_region_ID);
+            saved_pro_location_text=itemView.findViewById(R.id.saved_location_ID);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

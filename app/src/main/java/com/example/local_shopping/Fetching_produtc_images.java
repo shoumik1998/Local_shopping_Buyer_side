@@ -20,6 +20,8 @@ public class Fetching_produtc_images {
     String Response;
     @SerializedName("currency")
     String Crrency;
+    @SerializedName("location")
+    String Location;
 
 
     public  String getUser_Name(){
@@ -51,5 +53,9 @@ public class Fetching_produtc_images {
 
     public String getResponse() {
         return Response;
+    }
+
+    public String getLocation() {
+        return Location;
     }
 }

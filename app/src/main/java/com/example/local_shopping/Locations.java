@@ -11,6 +11,8 @@ public class Locations {
     String SubDistrict;
     @SerializedName("region")
     String Region;
+    @SerializedName("location_xt")
+    String Location_xt;
 
     public String getCountry() {
         return Country;
@@ -26,5 +28,9 @@ public class Locations {
 
     public String getRegion() {
         return Region;
+    }
+
+    public String getLocation_xt() {
+        return Location_xt;
     }
 }

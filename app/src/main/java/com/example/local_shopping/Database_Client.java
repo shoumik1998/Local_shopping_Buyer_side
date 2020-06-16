@@ -12,6 +12,7 @@ public class Database_Client {
     public Database_Client(Context context) {
         this.context = context;
         appDatabase= Room.databaseBuilder(context,AppDatabase.class,"Saved_Products")
+                .fallbackToDestructiveMigration()
                 .build();
 
     }
