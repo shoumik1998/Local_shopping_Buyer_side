@@ -340,6 +340,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId()==R.id.nextActivityID){
             startActivity(new Intent(MainActivity.this, Location_finder.class));
+        }else if(item.getItemId()==R.id.shop_searchID){
+            startActivity(new Intent(MainActivity.this,Search_shop_by_Name.class));
+
         }
         else if (item.getItemId()==R.id.go_to_saved_act_ID){
             startActivity(new Intent(MainActivity.this,Saved_Activity.class));

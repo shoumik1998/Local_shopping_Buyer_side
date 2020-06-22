@@ -14,6 +14,10 @@
         android:title="set desired shop region" />
     <item
         app:showAsAction="never"
+        android:title="search shop by name"
+        android:id="@+id/shop_searchID"/>
+    <item
+        app:showAsAction="never"
         android:id="@+id/go_to_saved_act_ID"
         android:title=" Saved " />
 </menu>

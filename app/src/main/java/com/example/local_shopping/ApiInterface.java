@@ -28,5 +28,9 @@ public interface ApiInterface {
     @GET("dataFetching.php")
     Call<List<Fetching_produtc_images>> fetching_pro_visiting_shop(@Query("user_name") String user_name);
 
+    @GET("shop_name_fetching.php")
+    Call<List<Locations>> get_Shop_Name(@Query("shop_name")String  Shop_name,@Query("region") String Region,
+                                        @Query("country")String Country,@Query("district")String District,@Query("subdistrict") String Subdistrict);
+
 
 }

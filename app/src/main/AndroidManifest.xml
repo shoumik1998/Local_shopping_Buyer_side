@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Visit_Shop"></activity>
+        <activity android:name=".Search_shop_by_Name"></activity>
+        <activity android:name=".Visit_Shop" />
         <activity
             android:name=".Splash_Screen"
             android:screenOrientation="portrait">
