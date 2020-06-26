@@ -18,7 +18,6 @@ import retrofit2.Response;
 
 public class Visit_Shop extends AppCompatActivity {
 
-    private List<Fetching_produtc_images> product_list;
     private  RecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
     private  RecyclerView.LayoutManager layoutManager;

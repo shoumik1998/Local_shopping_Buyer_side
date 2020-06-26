@@ -27,7 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private  RecyclerView.LayoutManager layoutManager;
     private List<Fetching_produtc_images> images;
     private  RecyclerAdapter adapter;
@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private  boolean isLoading =true;
     private Toolbar toolbar;
     private  SearchView searchView;
+    private   String query;
 
 
     private SharedPreferences sharedPreferences;
     public  static  MainActivity mainActivity;
     public boolean from_location_search_act=false;
     public  boolean from_product_search_act=false;
-    public  String parsing_pro_name=null;
 
 
 
@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 
         recyclerView=findViewById(R.id.recyclerID);
         progressBar=findViewById(R.id.progressBarID);
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
          if (from_product_search_act==true){
-            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),parsing_pro_name);
+            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
 
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -133,29 +130,6 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-        else if (!read_region_status()){
-            progressBar.setVisibility(View.VISIBLE);
-            Call<List<Fetching_produtc_images>> call=apiInterface.fetching_images(1);
-            call.enqueue(new Callback<List<Fetching_produtc_images>>() {
-                @Override
-                public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
-                    if (response.isSuccessful()){
-                        images=response.body();
-                        adapter=new RecyclerAdapter(images,MainActivity.this);
-                        recyclerView.setAdapter(adapter);
-                        progressBar.setVisibility(View.GONE);
-
-                    }else {
-                        Toast.makeText(MainActivity.this, "No response is found", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Failed  to connect"+t.toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
 
 
 
@@ -176,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!isLoading && (totalItemCount-visibleItemCount)<=(pastVisibleItems+view_ThreshHold)){
                         isLoading=true;
                         progressBar.setVisibility(View.GONE);
-                        pagenate(null);
+                        pagenate(query);
                     }
                 }
 
@@ -187,8 +161,8 @@ public class MainActivity extends AppCompatActivity {
     public  void  pagenate(String query){
         progressBar.setVisibility(View.VISIBLE);
         apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-         if(from_product_search_act==true) {
-            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
+         if(from_product_search_act==true ) {
+            Call<List<Fetching_produtc_images>> call1=apiInterface.fetch_pro_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
 
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -229,25 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-       else if (!read_region_status()){
-           progressBar.setVisibility(View.VISIBLE);
-            Call<List<Fetching_produtc_images>> call=apiInterface.fetching_images(1);
-            call.enqueue(new Callback<List<Fetching_produtc_images>>() {
-                @Override
-                public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
-                    if (response.isSuccessful()){
 
-                        List<Fetching_produtc_images> new_images=response.body();
-                        adapter.addImages(new_images);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
-                }
-            });
-        }
 
     }
 
@@ -262,27 +218,64 @@ public class MainActivity extends AppCompatActivity {
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(final String query) {
+            public boolean onQueryTextSubmit(final String Query) {
+                query=Query;
                 if (query.length()>2){
                     pastVisibleItems=0;
                     visibleItemCount=0;
                     previous_total=0;
                     progressBar.setVisibility(View.VISIBLE);
-                    from_product_search_act=true;
+
                     apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-                     Call<List<Fetching_produtc_images>> product_call=apiInterface.fetch_prp_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
+                     Call<List<Fetching_produtc_images>> product_call=apiInterface.fetch_pro_after_product_search(read_country(),read_district(),read_subdistrict(),read_region(),query);
                     product_call.enqueue(new Callback<List<Fetching_produtc_images>>() {
                         @Override
                         public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
                             if (response.isSuccessful()){
+                                pastVisibleItems=0;
+                                visibleItemCount=0;
+                                previous_total=0;
                                 images=response.body();
                                 RecyclerAdapter adapter=new RecyclerAdapter(images,MainActivity.this);
                                 recyclerView.setAdapter(adapter);
                                 progressBar.setVisibility(View.GONE);
+                                from_product_search_act=true;
+                                fetch_products_images();
+
 
                             }else {
                                 Toast.makeText(MainActivity.this, "No such product is found", Toast.LENGTH_SHORT).show();
                             }
+
+                            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
+                                    visibleItemCount=layoutManager.getChildCount();
+                                    totalItemCount=layoutManager.getItemCount();
+                                    pastVisibleItems=((GridLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                                    if (dy>0){
+                                        if (isLoading){
+                                            if (totalItemCount>previous_total){
+                                                isLoading=false;
+                                                previous_total=totalItemCount;
+                                            }
+                                        }
+                                        if (!isLoading && (totalItemCount-visibleItemCount)<=(pastVisibleItems+view_ThreshHold)){
+                                            isLoading=true;
+                                            progressBar.setVisibility(View.GONE);
+                                            pagenate(query);
+                                        }
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                    super.onScrollStateChanged(recyclerView, newState);
+                                }
+                            });
                         }
 
                         @Override
@@ -295,42 +288,25 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "type minimum 3 letter then search", Toast.LENGTH_SHORT).show();
                 }
 
-                recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                        super.onScrolled(recyclerView, dx, dy);
-                        visibleItemCount=layoutManager.getChildCount();
-                        totalItemCount=layoutManager.getItemCount();
-                        pastVisibleItems=((GridLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                        if (dy>0){
-                            if (isLoading){
-                                if (totalItemCount>previous_total){
-                                    isLoading=false;
-                                    previous_total=totalItemCount;
-                                }
-                            }
-                            if (!isLoading && (totalItemCount-visibleItemCount)<=(pastVisibleItems+view_ThreshHold)){
-                                isLoading=true;
-                                progressBar.setVisibility(View.VISIBLE);
-                                pagenate(query);
-                            }
-                        }
-
-
-                    }
-                });
 
 
                 return false;
+
+
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
+
         });
 
+
+
         return super.onCreateOptionsMenu(menu);
+
+
 
 
 
@@ -350,24 +326,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (from_product_search_act==true){
-            pastVisibleItems=0;
-            visibleItemCount=0;
-            previous_total=0;
-            fetch_products_images();
-        }
-        else if (from_location_search_act==true){
-            pastVisibleItems=0;
-            visibleItemCount=0;
-            previous_total=0;
-            fetch_products_images();
 
-        }
-
-    }
 
     public  void write_region_name(String Country,String District,String Subdistrict,String Region){
         SharedPreferences.Editor editor=sharedPreferences.edit();

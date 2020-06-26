@@ -1,5 +1,6 @@
 package com.example.local_shopping;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -51,7 +53,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.raw_layout,parent,false);
+       View view;
+       if(viewType==R.layout.raw_layout){
+           view= LayoutInflater.from(context).inflate(R.layout.raw_layout,parent,false);
+       }else {
+           view= LayoutInflater.from(context).inflate(R.layout.end_button_layout,parent,false);
+
+       }
 
         return new MyViewHolder(view);
     }
@@ -63,52 +71,70 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         shop_name=images_list.get(position).getShop_Name();
        final String currency=images_list.get(position).getCrrency();
         final String location=images_list.get(position).getLocation();
-         holder.Name.setText(product_name);
-        holder.Price.setText(product_price+" "+currency);
-        holder.ShopName.setText(shop_name);
-        Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
+        if (position==2000){
+            holder.end_point_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "refreshed page ", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context,Details_Activity.class);
-                intent.putExtra("ShopName",images_list.get(position).getShop_Name())
-                        .putExtra("img_path",images_list.get(position).getImage_path())
-                        .putExtra("Price",images_list.get(position).getPrice())
-                        .putExtra("currency",currency)
-                        .putExtra("Location",location)
-                        .putExtra("Product_Name",images_list.get(position).getName());
-                MainActivity.getInstance().from_location_search_act=false;
-                context.startActivity(intent);
-
+        }else  if (position>2000){
+               MainActivity.getInstance().fetch_products_images();
+        }
+        else {
+            holder.Name.setText(product_name);
+            holder.Price.setText(product_price + " " + currency);
+            holder.ShopName.setText(shop_name);
+            Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
 
 
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, Details_Activity.class);
+                    intent.putExtra("ShopName", images_list.get(position).getShop_Name())
+                            .putExtra("img_path", images_list.get(position).getImage_path())
+                            .putExtra("Price", images_list.get(position).getPrice())
+                            .putExtra("currency", currency)
+                            .putExtra("Location", location)
+                            .putExtra("Product_Name", images_list.get(position).getName());
+
+                    context.startActivity(intent);
+
+
+                }
+            });
+
+            holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    save_and_sharing_task(holder.imageView, holder.Name.getText().toString(), holder.Price.getText().toString()
+                            , images_list.get(position).getCrrency(), images_list.get(position).getLocation());
+                    return false;
+                }
+            });
+
+            if (context.getClass().getName() == Visit_Shop.class.getName()) {
+                holder.ShopName.setVisibility(View.GONE);
+
+            } else {
+                holder.ShopName.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, Visit_Shop.class);
+                        intent.putExtra("userName", images_list.get(position).getUser_Name());
+                        intent.putExtra("shopName", images_list.get(position).getShop_Name());
+                        context.startActivity(intent);
+                        Animatoo.animateWindmill(context);
+
+
+                    }
+                });
             }
-        });
-
-        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                save_and_sharing_task(holder.imageView,holder.Name.getText().toString(),holder.Price.getText().toString()
-                        ,images_list.get(position).getCrrency(),images_list.get(position).getLocation());
-                return false;
-            }
-        });
-
-        holder.ShopName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context,Visit_Shop.class);
-                intent.putExtra("userName",images_list.get(position).getUser_Name());
-                intent.putExtra("shopName",images_list.get(position).getShop_Name());
-                context.startActivity(intent);
-                Animatoo.animateWindmill(context);
 
 
-            }
-        });
-
-
+        }
     }
 
 
@@ -123,6 +149,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         ImageView imageView;
         TextView Name,Price,ShopName;
         CardView parentLayout;
+        Button end_point_btn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -131,6 +158,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             Price=itemView.findViewById(R.id.propriceID);
             ShopName=itemView.findViewById(R.id.shopNameID);
             parentLayout=itemView.findViewById(R.id.parentCardID);
+            end_point_btn=itemView.findViewById(R.id.end_buttonID);
         }
     }
     public  void  addImages(List<Fetching_produtc_images> images){
@@ -275,6 +303,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     }
 
-
-
+    @Override
+    public int getItemViewType(int position) {
+        return (position==2000) ? R.layout.end_button_layout:R.layout.raw_layout;
+    }
 }
