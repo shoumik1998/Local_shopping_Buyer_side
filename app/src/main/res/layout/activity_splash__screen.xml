@@ -6,16 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/splash_sv"
     tools:context=".Splash_Screen">
 
-    <TextView
-        android:textColor="#ff2288"
-        android:gravity="center"
-        android:textStyle="italic"
-        android:textSize="50dp"
-        android:text="Local shopping"
-        android:id="@+id/splash_ID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
 
 </LinearLayout>

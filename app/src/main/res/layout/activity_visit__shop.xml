@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@drawable/details_back"
+    android:background="@drawable/shop_back"
     tools:context=".Visit_Shop">
 
     <TextView
@@ -20,9 +20,11 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/visit_textID"
         android:layout_gravity="center"
         android:id="@+id/shop_visit_recyclerVID"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+         />
 
-</LinearLayout>
+</RelativeLayout>

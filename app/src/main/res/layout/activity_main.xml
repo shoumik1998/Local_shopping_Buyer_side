@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/main_back"
     android:layout_gravity="center"
+    android:background="@drawable/back_main1"
     tools:context=".MainActivity">
 
 
@@ -16,7 +16,7 @@
         <androidx.appcompat.widget.Toolbar
             app:title="Search Product by Name "
             android:id="@+id/toolbarID"
-            android:background="#63ace5"
+            android:background="#FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
            style="@style/AppTheme.AppBarOverlay"/>

@@ -13,8 +13,8 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            app:title="Search Shop Location "
-            android:background="#63ace5"
+            app:title="Search Shop By Name "
+            android:background="#c0d6e4"
             android:id="@+id/searched_shop_toolbarID_location"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>

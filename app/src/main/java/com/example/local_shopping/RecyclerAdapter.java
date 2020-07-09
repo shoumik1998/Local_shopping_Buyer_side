@@ -90,7 +90,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
+
                 public void onClick(View v) {
                     Intent intent = new Intent(context, Details_Activity.class);
                     intent.putExtra("ShopName", images_list.get(position).getShop_Name())

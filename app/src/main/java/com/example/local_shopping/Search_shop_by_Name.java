@@ -66,7 +66,6 @@ public class Search_shop_by_Name extends AppCompatActivity {
                         public void onResponse(Call<List<Locations>> call, Response<List<Locations>> response) {
                             if (response.isSuccessful()){
                                 shop_list=response.body();
-                                Toast.makeText(Search_shop_by_Name.this, "response", Toast.LENGTH_SHORT).show();
                                 Shop_search_Adapter adapter=new Shop_search_Adapter(Search_shop_by_Name.this,R.layout.shop_search_layout,shop_list);
                                 shop_list_view.setVisibility(View.VISIBLE);
                                 shop_list_view.setAdapter(adapter);
