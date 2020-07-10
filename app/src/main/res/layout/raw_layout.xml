@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#ff198d"
                 android:textSize="20dp"
                 android:id="@+id/shopNameID"
@@ -25,13 +26,15 @@
                 android:layout_width="150dp"
                 android:layout_height="160dp" />
             <TextView
-                android:textColor="#357c5e"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="#065B32"
                 android:id="@+id/proNameID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:textColor="#4f58ee"
+                android:fontFamily="sans-serif-thin"
+                android:textColor="#0000FF"
                 android:id="@+id/propriceID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

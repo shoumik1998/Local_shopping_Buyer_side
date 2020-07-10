@@ -29,28 +29,33 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#268b07"
                 android:textSize="30dp"
                 android:id="@+id/saved_product_name_ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#4f58ee"
                 android:textSize="20dp"
                 android:id="@+id/saved_price_ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#a748c3"
                 android:id="@+id/saved_shop_name_ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#ff198d"
                 android:id="@+id/saved_region_ID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:fontFamily="sans-serif-thin"
                 android:textColor="#ff198d"
                 android:id="@+id/saved_location_ID"
                 android:layout_width="match_parent"

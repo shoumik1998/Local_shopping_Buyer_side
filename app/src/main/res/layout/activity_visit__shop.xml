@@ -10,10 +10,11 @@
     tools:context=".Visit_Shop">
 
     <TextView
+        android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:textSize="40dp"
         android:id="@+id/visit_textID"
-        android:textColor="#c0d6e4"
+        android:textColor="#ff198d"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
