@@ -82,8 +82,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                             .putExtra("currency", currency)
                             .putExtra("Location", location)
                             .putExtra("Product_Name", images_list.get(position).getName());
-
                     context.startActivity(intent);
+                    MainActivity.getInstance().from_location_search_act=false;
 
 
                 }
