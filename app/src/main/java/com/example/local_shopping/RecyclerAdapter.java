@@ -53,14 +53,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view;
-       if(viewType==R.layout.raw_layout){
-           view= LayoutInflater.from(context).inflate(R.layout.raw_layout,parent,false);
-       }else {
-           view= LayoutInflater.from(context).inflate(R.layout.end_button_layout,parent,false);
-
-       }
-
+       View view= LayoutInflater.from(context).inflate(R.layout.raw_layout,parent,false);
         return new MyViewHolder(view);
     }
 
@@ -71,19 +64,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         shop_name=images_list.get(position).getShop_Name();
        final String currency=images_list.get(position).getCrrency();
         final String location=images_list.get(position).getLocation();
-        if (position==2000){
-            holder.end_point_btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "refreshed page ", Toast.LENGTH_SHORT).show();
-                }
-            });
 
-        }else  if (position>2000){
-               MainActivity.getInstance().fetch_products_images();
-        }
-        else {
             holder.Name.setText(product_name);
+
             holder.Price.setText(product_price + " " + currency);
             holder.ShopName.setText(shop_name);
             Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
@@ -133,8 +116,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 });
             }
 
-
-        }
     }
 
 
@@ -295,7 +276,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
                 return null;
             }
-
         }
         Save_Product_Info product_info=new Save_Product_Info();
         product_info.execute();
@@ -303,8 +283,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return (position==2000) ? R.layout.end_button_layout:R.layout.raw_layout;
-    }
+
 }

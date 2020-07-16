@@ -8,16 +8,4 @@
         android:id="@+id/pro_finder_searchID"
         android:icon="@android:drawable/ic_search_category_default"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
-    <item
-        app:showAsAction="never"
-        android:id="@+id/nextActivityID"
-        android:title="set desired shop region" />
-    <item
-        app:showAsAction="never"
-        android:title="search shop by name"
-        android:id="@+id/shop_searchID"/>
-    <item
-        app:showAsAction="never"
-        android:id="@+id/go_to_saved_act_ID"
-        android:title=" Saved " />
 </menu>

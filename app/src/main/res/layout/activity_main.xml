@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,22 +13,99 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <androidx.appcompat.widget.Toolbar
-            app:title="Search Product by Name "
-            android:id="@+id/toolbarID"
-            android:background="#FFFFFF"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-           style="@style/AppTheme.AppBarOverlay"/>
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarID"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                style="@style/AppTheme.AppBarOverlay"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recyclerID"
-    android:padding="10dp"
-        android:layout_gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/main_famID"
+        android:layout_width="427dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="0dp"
+        android:padding="4dp"
+        app:menu_fab_size="normal"
+        app:menu_animationDelayPerItem="20"
+        app:menu_colorNormal="#407294"
+        app:menu_labels_colorNormal="#088da5"
+        app:menu_colorPressed="#407294"
+        app:menu_colorRipple="#407294"
+        app:menu_labels_colorPressed="#45cc22"
+        app:menu_labels_colorRipple="#00ff00"
+        app:menu_labels_cornerRadius="6dp"
+        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        app:menu_labels_position="left"
+        app:menu_icon="@drawable/ic_baseline_menu_24"
+        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/shop_regionoptionID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_label="Search Shop Region"
+            app:fab_colorNormal="#000080"
+            app:fab_colorPressed="#000080"
+            app:fab_colorRipple="#000080"
+            android:src="@drawable/ic_location_searching"
+            android:pointerIcon="zoom_out"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/shop_nameoptionID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#f7347a"
+            app:fab_colorPressed="#f7347a"
+            app:fab_colorRipple="#f7347a"
+            android:src="@drawable/ic_search"
+            app:fab_label="Search Shop Name"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/savd_optionID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#800080"
+            app:fab_colorPressed="#800080"
+            app:fab_colorRipple="#800080"
+            android:src="@drawable/ic_save"
+            app:fab_label="Saved"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/refresh_optionID"
+            android:layout_width="wrap_content"
+            app:fab_colorNormal="#0000ff"
+            app:fab_colorPressed="#0000ff"
+            app:fab_colorRipple="#0000ff"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_refresh"
+            app:fab_label="Refresh Page"
+            app:fab_size="mini" />
+
+
+    </com.github.clans.fab.FloatingActionMenu>
 
     <ProgressBar
         android:foregroundGravity="center"
@@ -38,4 +115,11 @@
         android:layout_height="50dp"/>
 
 
-</LinearLayout>
+
+
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

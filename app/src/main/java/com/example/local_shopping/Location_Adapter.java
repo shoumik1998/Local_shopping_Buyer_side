@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,6 +56,7 @@ public class Location_Adapter extends ArrayAdapter {
                 MainActivity.getInstance().from_location_search_act=true;
                 context.startActivity(new Intent(context,MainActivity.class));
                 ((Activity)context).finish();
+
 
             }
         });
