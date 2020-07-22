@@ -21,6 +21,16 @@
 
     </FrameLayout>
 
+    <TextView
+        android:padding="3dp"
+        android:layout_margin="5dp"
+        android:textSize="20dp"
+        android:textColor="#4ca3dd"
+        android:text="Find  shop by name  on search bar which you want to visit"
+        android:id="@+id/shop_search_textID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ListView
         android:layout_margin="10dp"
         android:id="@+id/shop_List_ID"

@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         images = response.body();
                         adapter = new RecyclerAdapter(images, MainActivity.this);
                         recyclerView.setAdapter(adapter);
-
                         progressBar.setVisibility(View.GONE);
                     }
                 }
@@ -231,77 +230,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(final String Query) {
-                query = Query;
-                if (query.length() > 2) {
-                    pastVisibleItems = 0;
-                    visibleItemCount = 0;
-                    previous_total = 0;
-                    progressBar.setVisibility(View.VISIBLE);
+                query =Query;
+                from_product_search_act = false;
+                from_location_search_act=false;
 
-                    apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-                    Call<List<Fetching_produtc_images>> product_call = apiInterface.fetch_pro_after_product_search(read_country(), read_district(), read_subdistrict(), read_region(), query);
-                    product_call.enqueue(new Callback<List<Fetching_produtc_images>>() {
-                        @Override
-                        public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
-                            if (response.isSuccessful()) {
-                                pastVisibleItems = 0;
-                                visibleItemCount = 0;
-                                previous_total = 0;
-                                images = response.body();
-                                RecyclerAdapter adapter = new RecyclerAdapter(images, MainActivity.this);
-                                recyclerView.setAdapter(adapter);
-                                progressBar.setVisibility(View.GONE);
-                                from_product_search_act = true;
-                                fetch_products_images();
+                pastVisibleItems = 0;
+                visibleItemCount = 0;
+                previous_total = 0;
+                progressBar.setVisibility(View.VISIBLE);
+
+                apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
+                Call<List<Fetching_produtc_images>> product_call = apiInterface.fetch_pro_after_product_search(read_country(), read_district(), read_subdistrict(), read_region(), query);
+                product_call.enqueue(new Callback<List<Fetching_produtc_images>>() {
+                    @Override
+                    public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
+                        if (response.isSuccessful()) {
+                            pastVisibleItems = 0;
+                            visibleItemCount = 0;
+                            previous_total = 0;
+                            images = response.body();
+                            RecyclerAdapter adapter = new RecyclerAdapter(images, MainActivity.this);
+                            recyclerView.setAdapter(adapter);
+                            progressBar.setVisibility(View.GONE);
+                            from_product_search_act = true;
+                            fetch_products_images();
 
 
-                            } else {
-                                Toast.makeText(MainActivity.this, "No such product is found", Toast.LENGTH_SHORT).show();
-                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, "No such product is found", Toast.LENGTH_SHORT).show();
+                        }
 
-                            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                @Override
-                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                    super.onScrolled(recyclerView, dx, dy);
-                                    visibleItemCount = layoutManager.getChildCount();
-                                    totalItemCount = layoutManager.getItemCount();
-                                    pastVisibleItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                                    if (dy > 0) {
-                                        if (isLoading) {
-                                            if (totalItemCount > previous_total) {
-                                                isLoading = false;
-                                                previous_total = totalItemCount;
-                                            }
-                                        }
-                                        if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_ThreshHold)) {
-                                            isLoading = true;
-                                            progressBar.setVisibility(View.GONE);
-                                            pagenate(query);
+                        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                visibleItemCount = layoutManager.getChildCount();
+                                totalItemCount = layoutManager.getItemCount();
+                                pastVisibleItems = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                                if (dy > 0) {
+                                    if (isLoading) {
+                                        if (totalItemCount > previous_total) {
+                                            isLoading = false;
+                                            previous_total = totalItemCount;
                                         }
                                     }
+                                    if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_ThreshHold)) {
+                                        isLoading = true;
+                                        progressBar.setVisibility(View.GONE);
+                                        pagenate(query);
+                                    }
                                 }
+                            }
 
-                                @Override
-                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                    super.onScrollStateChanged(recyclerView, newState);
-                                }
-                            });
-                        }
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                super.onScrollStateChanged(recyclerView, newState);
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
 
-                        }
-                    });
-                } else {
-                    from_product_search_act = false;
-                    Toast.makeText(MainActivity.this, "type minimum 3 letter then search", Toast.LENGTH_SHORT).show();
-                }
+                    }
+                });
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
+
+
                 return false;
             }
         });
@@ -401,16 +402,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (from_product_search_act == true) {
-            pastVisibleItems = 0;
-            visibleItemCount = 0;
-            previous_total = 0;
-            fetch_products_images();
-        } else if (from_location_search_act == true) {
+         if (from_location_search_act == true) {
             pastVisibleItems = 0;
             visibleItemCount = 0;
             previous_total = 0;
             fetch_products_images();
         }
     }
+
 }

@@ -17,7 +17,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
-
+import android.widget.TextView;
 
 
 import java.util.List;
@@ -28,6 +28,7 @@ import retrofit2.Response;
 
 public class Location_finder extends AppCompatActivity {
     private ListView listView;
+    private TextView search_description;
     private  ApiInterface apiInterface;
     private List<Locations> locationsList;
     private Toolbar toolbar;
@@ -39,6 +40,7 @@ public class Location_finder extends AppCompatActivity {
         setContentView(R.layout.activity_location_finder);
 
         listView=findViewById(R.id.locationList_ID);
+        search_description=findViewById(R.id.region_finder_textID);
         toolbar=findViewById(R.id.toolbarID_location);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -74,6 +76,7 @@ public class Location_finder extends AppCompatActivity {
                                     locationsList=response.body();
                                     Location_Adapter location_adapter=new Location_Adapter(Location_finder.this,R.layout.location_layout,locationsList);
                                     listView.setVisibility(View.VISIBLE);
+                                    search_description.setVisibility(View.GONE);
                                     listView.setAdapter(location_adapter);
                                 }
                             }

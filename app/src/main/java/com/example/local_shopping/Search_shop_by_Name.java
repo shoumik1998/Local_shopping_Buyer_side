@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import retrofit2.Response;
 
 public class Search_shop_by_Name extends AppCompatActivity {
     private ListView shop_list_view;
+    private TextView search_shop_text;
     private List<Locations> shop_list;
     private Toolbar toolbar;
     private  ApiInterface apiInterface;
@@ -31,6 +33,7 @@ public class Search_shop_by_Name extends AppCompatActivity {
         setContentView(R.layout.activity_search_shop_by__name);
 
         shop_list_view=findViewById(R.id.shop_List_ID);
+        search_shop_text=findViewById(R.id.shop_search_textID);
         toolbar=findViewById(R.id.searched_shop_toolbarID_location);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -68,6 +71,7 @@ public class Search_shop_by_Name extends AppCompatActivity {
                                 shop_list=response.body();
                                 Shop_search_Adapter adapter=new Shop_search_Adapter(Search_shop_by_Name.this,R.layout.shop_search_layout,shop_list);
                                 shop_list_view.setVisibility(View.VISIBLE);
+                                search_shop_text.setVisibility(View.GONE);
                                 shop_list_view.setAdapter(adapter);
 
                             }

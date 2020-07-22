@@ -164,7 +164,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             @Override
             public void onClick(View v) {
                 File filepath = Environment.getExternalStorageDirectory();
-                File dir = new File(filepath.getAbsolutePath() + "/Local_Shopping/");
+                File dir = new File(filepath.getAbsolutePath() + "/Shop Visitor/");
                 if (!dir.exists()) {
                     dir.mkdir();
                 }

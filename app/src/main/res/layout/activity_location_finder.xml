@@ -13,13 +13,24 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            app:title="Search Shop Location "
+            app:title="Set Shop Region "
             android:background="#c0d6e4"
             android:id="@+id/toolbarID_location"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
 
     </FrameLayout>
+
+    <TextView
+        android:layout_margin="5dp"
+        android:padding="3dp"
+        android:textColor="#4ca3dd"
+        android:text="Write  a region name  on search bar in which shops you want to visit.
+This may be your or any other village, sub-district, city corporation name etc."
+        android:textSize="20dp"
+        android:id="@+id/region_finder_textID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ListView
         android:layout_margin="10dp"
