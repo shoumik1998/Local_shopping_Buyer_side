@@ -93,7 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 @Override
                 public boolean onLongClick(View v) {
                     save_and_sharing_task(holder.imageView, holder.Name.getText().toString(), holder.Price.getText().toString()
-                            , images_list.get(position).getCrrency(), images_list.get(position).getLocation());
+                            , images_list.get(position).getCrrency(), images_list.get(position).getLocation(),images_list.get(position).getShop_Name());
                     return false;
                 }
             });
@@ -151,7 +151,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
 
-    public  void  save_and_sharing_task(final ImageView imgView, final String pro_name, final String pro_price,final String currency,final  String location){
+    public  void  save_and_sharing_task(final ImageView imgView, final String pro_name, final String pro_price,final String currency,final  String location,final String shop_name){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
        View  view=LayoutInflater.from(context).inflate(R.layout.share_and_save_dialouge,null,false);
          TextView sharebtn=view.findViewById(R.id.shareID);
@@ -211,7 +211,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 }else {
                     context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,Uri.parse(String.valueOf(file))));
                 }
-                save_product_info(image_uri,pro_name,pro_price,currency,location);
+                save_product_info(image_uri,pro_name,pro_price,currency,location,shop_name);
                 dialog.dismiss();
 
             }
@@ -260,7 +260,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     }
 
-    private void save_product_info(final Uri uri, final String sproduct_name, final String sproduct_price,final String sCurrency,final  String sShop_location) {
+    private void save_product_info(final Uri uri, final String sproduct_name, final String sproduct_price,final String sCurrency,final  String sShop_location,final String shop_name) {
 
 
         class  Save_Product_Info extends AsyncTask<Void,Void,Void>{
