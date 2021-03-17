@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,17 +44,26 @@ public class Visit_Shop extends AppCompatActivity {
 
     public  void  fetch_pro_after_visiting_shop(){
 
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("user_name", getIntent().getStringExtra("userName"));
 
         ApiInterface apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-        Call<List<Fetching_produtc_images>> call=apiInterface.fetching_pro_visiting_shop(getIntent().getStringExtra("userName"));
+        Call<List<Fetching_produtc_images>> call=apiInterface.fetching_pro_visiting_shop(map);
 
         call.enqueue(new Callback<List<Fetching_produtc_images>>() {
             @Override
             public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
                 if (response.isSuccessful()){
                     products = response.body();
-               recyclerAdapter=new RecyclerAdapter(products,Visit_Shop.this);
-               recyclerView.setAdapter(recyclerAdapter);
+                    if (response.body().size() !=0) {
+                        recyclerAdapter = new RecyclerAdapter(products, Visit_Shop.this);
+                        recyclerView.setAdapter(recyclerAdapter);
+                    } else {
+
+                        Toast.makeText(Visit_Shop.this, "No products available", Toast.LENGTH_SHORT).show();
+                    }
+
+
 
                 }else {
                     Toast.makeText(Visit_Shop.this, "no response ", Toast.LENGTH_SHORT).show();

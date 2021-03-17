@@ -1,16 +1,33 @@
 package com.example.local_shopping;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+
 
 public class Fetching_produtc_images {
 
+    @SerializedName("routing")
+    @Expose
+    Fetching_produtc_images routing ;
+
+    public Fetching_produtc_images getRouting() {
+        return routing;
+    }
+
+    public void setRouting(Fetching_produtc_images routing) {
+        this.routing = routing;
+    }
+
     @SerializedName("user_name")
     String User_Name;
-    @SerializedName("shop_name")
-    String Shop_Name;
     @SerializedName("name")
+    String Shop_Name;
+    @SerializedName("description")
     String Name;
-    @SerializedName("image_path")
+    @SerializedName("imagepath")
     String Image_path;
     @SerializedName("price")
     String Price;
@@ -20,7 +37,7 @@ public class Fetching_produtc_images {
     String Response;
     @SerializedName("currency")
     String Crrency;
-    @SerializedName("location")
+    @SerializedName("Location")
     String Location;
 
 

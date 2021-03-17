@@ -1,36 +1,38 @@
 package com.example.local_shopping;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
-    @GET("user_data_fetching.php")
-    Call<List<Fetching_produtc_images>> fetching_images(@Query("page_num") int page_number);
+    @GET("user_data_fetching/:page_num")
+    Call<List<Fetching_produtc_images>> fetching_images(@Field("page_num") int page_number);
 
-    @GET("location_fetching.php")
-    Call<List<Locations>> getLocations(@Query("region") String region);
+    @POST("lf")
+    Call<List<Locations>> getLocations(@Body HashMap<String,Object> map);
 
-    @GET("fetching_product_Name.php")
+    @GET("fetching_product_name/:product_name")
     Call<List<Fetching_produtc_images>> getProductName(@Query("product_name") String productName);
 
-    @GET("temp_location.php")
-    Call<List<Fetching_produtc_images>> fetch_pro_after_location_search(@Query("country") String Country,@Query("district") String District, @Query("subdistrict") String Subdistrict,@Query("region") String Region);
+    @POST("fetch_pro_after_location_search")
+    Call<List<Fetching_produtc_images>> fetch_pro_after_location_search(@Body HashMap<String,Object> map);
 
-    @GET("fetching_pro_by_name_specific_region.php")
-    Call<List<Fetching_produtc_images>> fetch_pro_after_product_search(@Query("country") String Country,@Query("district") String District, @Query("subdistrict") String Subdistrict,@Query("region") String Region,
-                                                                       @Query("product_name") String product_name);
+    @POST("fetching_pro_by_name_specific_region")
+    Call<List<Fetching_produtc_images>> fetch_pro_after_product_search(@Body HashMap<String,Object> map);
 
-    @GET("dataFetching.php")
-    Call<List<Fetching_produtc_images>> fetching_pro_visiting_shop(@Query("user_name") String user_name);
+    @POST("data_fetching")
+    Call<List<Fetching_produtc_images>> fetching_pro_visiting_shop(@Body HashMap<String,Object> map);
 
-    @GET("shop_name_fetching.php")
-    Call<List<Locations>> get_Shop_Name(@Query("shop_name")String  Shop_name,@Query("region") String Region,
-                                        @Query("country")String Country,@Query("district")String District,@Query("subdistrict") String Subdistrict);
+    @POST("shop_name_fetching")
+    Call<List<Locations>> get_Shop_Name(@Body HashMap<String,Object> map);
 
 
 }

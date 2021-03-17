@@ -11,9 +11,9 @@ public class Locations {
     String SubDistrict;
     @SerializedName("region")
     String Region;
-    @SerializedName("location_xt")
+    @SerializedName("Location")
     String Location_xt;
-    @SerializedName("shop_name")
+    @SerializedName("name")
     String Shop_name;
     @SerializedName("user_name")
     String User_name;

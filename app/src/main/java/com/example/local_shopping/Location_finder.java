@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -66,8 +67,10 @@ public class Location_finder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!TextUtils.isEmpty(newText)){
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("region", newText);
                     apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
-                    Call<List<Locations>> call=apiInterface.getLocations(newText);
+                    Call<List<Locations>> call=apiInterface.getLocations(map);
                     call.enqueue(new Callback<List<Locations>>() {
                         @Override
                         public void onResponse(Call<List<Locations>> call, Response<List<Locations>> response) {

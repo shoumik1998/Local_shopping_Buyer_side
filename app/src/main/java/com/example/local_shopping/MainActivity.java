@@ -15,18 +15,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -50,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static MainActivity mainActivity;
     public boolean from_location_search_act = false;
     public boolean from_product_search_act = false;
+    HashMap<String,Object> map=new HashMap<>();
 
     private FloatingActionButton F_Refresh, F_Saved, F_Shop_Search, F_Region_Search;
     private FloatingActionMenu FAM;
@@ -90,6 +88,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         fetch_products_images();
+
+        map.put("country",read_country());
+        map.put("district", read_district());
+        map.put("subdistrict", read_subdistrict());
+        map.put("region", read_region());
+        map.put("product_name", query);
     }
 
 
@@ -101,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar.setVisibility(View.VISIBLE);
         apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
         if (from_product_search_act == true) {
-            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_product_search(read_country(), read_district(), read_subdistrict(), read_region(), query);
+
+            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_product_search(map);
 
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -124,7 +129,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
         } else if (read_region_status()) {
             progressBar.setVisibility(View.VISIBLE);
-            Call<List<Fetching_produtc_images>> call2 = apiInterface.fetch_pro_after_location_search(read_country(), read_district(), read_subdistrict(), read_region());
+
+            HashMap<String,Object> map=new HashMap<>();
+            map.put("country", read_country());
+            map.put("district", read_district());
+            map.put("subdistrict", read_subdistrict());
+            map.put("region", read_region());
+
+            Call<List<Fetching_produtc_images>> call2 = apiInterface.fetch_pro_after_location_search(map);
 
             call2.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -156,23 +168,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (totalItemCount > previous_total) {
                             isLoading = false;
                             previous_total = totalItemCount;
+
                         }
                     }
                     if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_ThreshHold)) {
                         isLoading = true;
                         progressBar.setVisibility(View.GONE);
-                        pagenate(query);
+                        pagenate();
                     }
                 }
             }
         });
     }
 
-    public void pagenate(String query) {
+    public void pagenate() {
         progressBar.setVisibility(View.VISIBLE);
         apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
         if (from_product_search_act == true) {
-            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_product_search(read_country(), read_district(), read_subdistrict(), read_region(), query);
+            Call<List<Fetching_produtc_images>> call1 = apiInterface.fetch_pro_after_product_search(map);
 
             call1.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -196,7 +209,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
         } else if (read_region_status()) {
             progressBar.setVisibility(View.VISIBLE);
-            Call<List<Fetching_produtc_images>> call2 = apiInterface.fetch_pro_after_location_search(read_country(), read_district(), read_subdistrict(), read_region());
+
+            HashMap<String,Object> map=new HashMap<>();
+            map.put("country", read_country());
+            map.put("district", read_district());
+            map.put("subdistrict", read_subdistrict());
+            map.put("region", read_region());
+
+            Call<List<Fetching_produtc_images>> call2 = apiInterface.fetch_pro_after_location_search(map);
 
             call2.enqueue(new Callback<List<Fetching_produtc_images>>() {
                 @Override
@@ -204,13 +224,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (response.isSuccessful()) {
                         List<Fetching_produtc_images> new_images = response.body();
                         adapter.addImages(new_images);
-
                         progressBar.setVisibility(View.GONE);
+
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Fetching_produtc_images>> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "failed to fetch images ", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -240,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 progressBar.setVisibility(View.VISIBLE);
 
                 apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);
-                Call<List<Fetching_produtc_images>> product_call = apiInterface.fetch_pro_after_product_search(read_country(), read_district(), read_subdistrict(), read_region(), query);
+                Call<List<Fetching_produtc_images>> product_call = apiInterface.fetch_pro_after_product_search(map);
                 product_call.enqueue(new Callback<List<Fetching_produtc_images>>() {
                     @Override
                     public void onResponse(Call<List<Fetching_produtc_images>> call, Response<List<Fetching_produtc_images>> response) {
@@ -277,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_ThreshHold)) {
                                         isLoading = true;
                                         progressBar.setVisibility(View.GONE);
-                                        pagenate(query);
+                                        pagenate();
                                     }
                                 }
                             }

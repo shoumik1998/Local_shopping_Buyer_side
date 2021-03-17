@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -59,10 +60,15 @@ public class Search_shop_by_Name extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!TextUtils.isEmpty(newText)){
+                    HashMap<String, Object> map = new HashMap<>();
                     apiInterface=ApiClient.getRetrofit().create(ApiInterface.class);
                     MainActivity mainActivity=MainActivity.getInstance();
-                    Call<List<Locations>> call=apiInterface.get_Shop_Name(newText,mainActivity.read_region(),mainActivity.read_country(),
-                            mainActivity.read_district(),mainActivity.read_subdistrict());
+                    map.put("country", mainActivity.read_country());
+                    map.put("district", mainActivity.read_district());
+                    map.put("subdistrict", mainActivity.read_subdistrict());
+                    map.put("region", mainActivity.read_region());
+                    map.put("shop_name", newText);
+                    Call<List<Locations>> call=apiInterface.get_Shop_Name(map);
 
                     call.enqueue(new Callback<List<Locations>>() {
                         @Override
