@@ -14,15 +14,26 @@
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:fontFamily="sans-serif-thin"
-                android:textColor="#ff198d"
-                android:textSize="20dp"
-                android:id="@+id/shopNameID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_margin="4dp"
+                    android:padding="4dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColor="#ff198d"
+                    android:textSize="20dp"
+                    android:id="@+id/shopNameID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <ImageView
+                    android:src="@drawable/green_circle"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"/>
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/proIMgID"
                 android:layout_width="150dp"

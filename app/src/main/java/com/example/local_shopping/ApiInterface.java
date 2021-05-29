@@ -34,5 +34,16 @@ public interface ApiInterface {
     @POST("shop_name_fetching")
     Call<List<Locations>> get_Shop_Name(@Body HashMap<String,Object> map);
 
+    @POST("user_signup")
+    Call<SignUp_Model> signUp(@Body HashMap<String,String> map);
+
+    @POST("user_login")
+    Call<SignUp_Model> logoIn(@Body HashMap<String,String> map);
+
+    @POST("pusher")
+    Call<String>  onOrder(@Body  HashMap< String,String> map);
+
+
+
 
 }

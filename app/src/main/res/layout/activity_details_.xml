@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:weightSum="6"
     android:padding="4dp"
     android:layout_height="match_parent"
     tools:context=".Details_Activity">
 
     <ImageView
-        android:layout_weight="5"
         android:id="@+id/datils_image_id"
         android:layout_width="match_parent"
-        android:layout_height="160dp"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/country_layoutID"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="4dp" />
     <LinearLayout
+        android:id="@+id/country_layoutID"
+        app:layout_constraintBottom_toTopOf="@id/district_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -31,6 +34,8 @@
 
     </LinearLayout>
     <LinearLayout
+        app:layout_constraintBottom_toTopOf="@id/subdistrict_layoutID"
+        android:id="@+id/district_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -47,12 +52,14 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/subdistrict_layoutID"
+        app:layout_constraintBottom_toTopOf="@id/region_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
             android:textColor="#800000"
-            android:text="sub District : "
+            android:text="Sub District : "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
@@ -63,6 +70,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/region_layoutID"
+        app:layout_constraintBottom_toTopOf="@id/location_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -79,6 +88,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/location_layoutID"
+        app:layout_constraintBottom_toTopOf="@id/shop_name_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -95,6 +106,8 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/shop_name_layoutID"
+        app:layout_constraintBottom_toTopOf="@id/product_name_layoutID"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -113,6 +126,8 @@
 
 
         <LinearLayout
+            android:id="@+id/product_name_layoutID"
+            app:layout_constraintBottom_toTopOf="@id/price_layoutID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -131,6 +146,9 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginBottom="50dp"
+            android:id="@+id/price_layoutID"
+           app:layout_constraintBottom_toTopOf="@id/elegant_btnID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -142,11 +160,36 @@
                 android:text="Price  : " />
 
             <TextView
-                android:textColor="#ff0000"
                 android:id="@+id/details_product_price_text_DI"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:textColor="#ff0000" />
         </LinearLayout>
 
+    <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+        android:id="@+id/elegant_btnID"
+        android:layout_width="183dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="20dp"
+        app:backGroundColor="#ffffff"
+        app:initialNumber="0"
+        app:layout_constraintBottom_toTopOf="@id/ad_cart_BtnID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:textColor="#196EFF"
+        app:textSize="18dp" />
 
-    </LinearLayout>
+    <Button
+        android:background="#0088FF"
+        android:textColor="#ffffff"
+        android:text="Add to cart"
+        android:id="@+id/ad_cart_BtnID"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
