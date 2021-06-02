@@ -94,6 +94,17 @@
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/products_orders_optionID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="#800080"
+            app:fab_colorPressed="#800080"
+            app:fab_colorRipple="#800080"
+            android:src="@drawable/ic_save"
+            app:fab_label="Orders"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/refresh_optionID"
             android:layout_width="wrap_content"
             app:fab_colorNormal="#0000ff"

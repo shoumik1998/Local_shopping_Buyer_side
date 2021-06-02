@@ -43,6 +43,12 @@ public interface ApiInterface {
     @POST("pusher")
     Call<String>  onOrder(@Body  HashMap< String,String> map);
 
+    @POST("ordered_products")
+    Call<List<Orders_Model>> ordered_products( @Body  HashMap<String,String> map);
+
+    @POST("shop_details")
+    Call<List<Locations>> onShop_Details(@Body HashMap<String,String> map);
+
 
 
 

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean from_product_search_act = false;
     HashMap<String,Object> map=new HashMap<>();
 
-    private FloatingActionButton F_Refresh, F_Saved, F_Shop_Search, F_Region_Search;
+    private FloatingActionButton F_Refresh, F_Saved,F_Orders, F_Shop_Search, F_Region_Search;
     private FloatingActionMenu FAM;
 
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FAM = findViewById(R.id.main_famID);
         F_Refresh = findViewById(R.id.refresh_optionID);
         F_Saved = findViewById(R.id.savd_optionID);
+        F_Orders = findViewById(R.id.products_orders_optionID);
         F_Shop_Search = findViewById(R.id.shop_nameoptionID);
         F_Region_Search = findViewById(R.id.shop_regionoptionID);
 
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         F_Refresh.setOnClickListener(this);
         F_Saved.setOnClickListener(this);
+        F_Orders.setOnClickListener(this);
         F_Shop_Search.setOnClickListener(this);
         F_Region_Search.setOnClickListener(this);
 
@@ -405,6 +407,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.savd_optionID:
                 startActivity(new Intent(MainActivity.this, Saved_Activity.class));
+                FAM.close(true);
+                break;
+            case R.id.products_orders_optionID:
+                startActivity(new Intent(MainActivity.this, Orders_Activity.class));
                 FAM.close(true);
                 break;
             case R.id.shop_nameoptionID:

@@ -16,9 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:label">
+        <activity android:name=".Ordered_Details_Activity"></activity>
+        <activity android:name=".Orders_Activity" />
         <activity
-            android:screenOrientation="portrait"
-            android:name=".Search_shop_by_Name"></activity>
+            android:name=".Search_shop_by_Name"
+            android:screenOrientation="portrait" />
         <activity android:name=".Visit_Shop" />
         <activity
             android:name=".Splash_Screen"
@@ -30,7 +32,6 @@
             </intent-filter>
         </activity>
         <activity
-
             android:name=".Full_Screen_Pro"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

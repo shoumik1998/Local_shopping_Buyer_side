@@ -41,7 +41,6 @@ public class Details_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_details_);
 
         Paper.init(Details_Activity.this);
-        Paper.book().delete("login_status");
 
 
         imageView = findViewById(R.id.datils_image_id);
@@ -269,7 +268,7 @@ public class Details_Activity extends AppCompatActivity {
                 order_map.put("phn_email", Paper.book().read("phn_email").toString());
                 order_map.put("product_number", numberButton.getNumber());
                 order_map.put("product_name",Product_Name_text.getText().toString());
-                order_map.put("product_price",Product_price_text.getText().toString());
+                order_map.put("product_price",getIntent().getStringExtra("Price"));
                 order_map.put("product_id",product_id);
 
 
