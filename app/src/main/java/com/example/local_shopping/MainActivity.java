@@ -26,6 +26,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.HashMap;
 import java.util.List;
 
+import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Paper.init(MainActivity.this);
+
+        Paper.book().write("phn_email", "");
 
         recyclerView = findViewById(R.id.recyclerID);
         progressBar = findViewById(R.id.progressBarID);
@@ -96,6 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         map.put("subdistrict", read_subdistrict());
         map.put("region", read_region());
         map.put("product_name", query);
+
+        if (Paper.book().read("phn_email").equals("")) {
+            F_Orders.setVisibility(View.GONE);
+        } else {
+            F_Orders.setVisibility(View.VISIBLE);
+        }
     }
 
 

@@ -9,7 +9,7 @@ public class Orders_Model {
     @SerializedName("number_of_product")
     String product_number;
     String imagepath;
-    String order_status;
+    int order_status;
     String issue_date;
     String delivering_date;
     String client_name;
@@ -75,11 +75,11 @@ public class Orders_Model {
         this.imagepath = imagepath;
     }
 
-    public String getOrder_status() {
+    public int getOrder_status() {
         return order_status;
     }
 
-    public void setOrder_status(String order_status) {
+    public void setOrder_status(int order_status) {
         this.order_status = order_status;
     }
 

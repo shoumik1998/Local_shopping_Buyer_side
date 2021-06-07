@@ -166,6 +166,8 @@
                 android:textColor="#ff0000" />
         </LinearLayout>
 
+
+
     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
         android:id="@+id/elegant_btnID"
         android:layout_width="183dp"
@@ -190,6 +192,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:textColor="#ff0000"
+        android:id="@+id/orderable_status_textID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/elegant_btnID"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_layoutID"
+        app:layout_constraintVertical_bias="0.0" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

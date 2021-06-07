@@ -100,7 +100,7 @@
             app:fab_colorNormal="#800080"
             app:fab_colorPressed="#800080"
             app:fab_colorRipple="#800080"
-            android:src="@drawable/ic_save"
+            android:src="@drawable/order_24"
             app:fab_label="Orders"
             app:fab_size="mini" />
 

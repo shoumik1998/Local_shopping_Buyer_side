@@ -31,9 +31,9 @@ public class Details_Activity extends AppCompatActivity {
     ApiInterface apiInterface;
     private ImageView imageView;
     private TextView Country_Text, District_Text, Sub_District_Text, Region_Text, Shop_Name_Text, Shop_Location_Text,
-            Product_Name_text, Product_price_text;
+            Product_Name_text, Product_price_text,orderable_status_text;
     private ElegantNumberButton numberButton;
-    private  String product_id;
+    private  String product_id,user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,21 @@ public class Details_Activity extends AppCompatActivity {
         Shop_Location_Text = findViewById(R.id.details_location_text_DI);
         Product_Name_text = findViewById(R.id.details_product_Name_text_DI);
         Product_price_text = findViewById(R.id.details_product_price_text_DI);
+        orderable_status_text = findViewById(R.id.orderable_status_textID);
         numberButton = findViewById(R.id.elegant_btnID);
         add_cartBtn = findViewById(R.id.ad_cart_BtnID);
+
+        if (getIntent().getIntExtra("orderable_status", 0) == 0) {
+            numberButton.setVisibility(View.GONE);
+            add_cartBtn.setVisibility(View.GONE);
+            orderable_status_text.setText("This product can not be ordered. Parches from shop !!");
+
+        }
+        else if (getIntent().getIntExtra("orderable_status", 0) == 1) {
+            numberButton.setVisibility(View.VISIBLE);
+            add_cartBtn.setVisibility(View.VISIBLE);
+            orderable_status_text.setText("Product can be ordered. ");
+        }
 
         product_id = getIntent().getStringExtra("product_id");
         Glide.with(this).load(getIntent().getStringExtra("img_path")).into(imageView);
@@ -65,6 +78,9 @@ public class Details_Activity extends AppCompatActivity {
         Shop_Name_Text.setText(getIntent().getStringExtra("ShopName"));
         Product_Name_text.setText(getIntent().getStringExtra("Product_Name"));
         Product_price_text.setText(getIntent().getStringExtra("Price") + " " + getIntent().getStringExtra("currency"));
+
+        user_name = getIntent().getStringExtra("user_name");
+        Toast.makeText(this, ""+user_name, Toast.LENGTH_SHORT).show();
 
 
 
@@ -87,7 +103,7 @@ public class Details_Activity extends AppCompatActivity {
         add_cartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Paper.book().read("login_status") == null) {
+                if (Paper.book().read("login_status").equals(false)) {
                     onLogin_Dialog();
                 } else if (Paper.book().read("login_status")) {
                     onOrder_info_Dialog();
@@ -270,6 +286,7 @@ public class Details_Activity extends AppCompatActivity {
                 order_map.put("product_name",Product_Name_text.getText().toString());
                 order_map.put("product_price",getIntent().getStringExtra("Price"));
                 order_map.put("product_id",product_id);
+                order_map.put("user_name", user_name);
 
 
                 apiInterface = ApiClient.getRetrofit().create(ApiInterface.class);

@@ -39,7 +39,11 @@ public class Fetching_produtc_images {
     String Crrency;
     @SerializedName("Location")
     String Location;
+    int orderable_status;
 
+    public int getOrderable_status() {
+        return orderable_status;
+    }
 
     public  String getUser_Name(){
         return User_Name;

@@ -142,4 +142,16 @@
         app:layout_constraintTop_toBottomOf="@+id/order_dialog_imageID"
         app:layout_constraintVertical_bias="0.86" />
 
+    <TextView
+        android:id="@+id/order_statusTxtID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Order Status"
+        app:layout_constraintBottom_toTopOf="@+id/order_dialog_deliver_dateID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_dialog_totalID"
+        app:layout_constraintVertical_bias="0.852" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

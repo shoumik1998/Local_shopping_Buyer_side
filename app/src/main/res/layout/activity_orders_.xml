@@ -6,9 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".Orders_Activity">
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/order_recyclerID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <TextView
+        android:textColor="#ff22ff"
+        android:textSize="25dp"
+        android:id="@+id/order_activity_textID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/order_recyclerID"
+        app:layout_constraintEnd_toEndOf="@+id/order_recyclerID"
+        app:layout_constraintStart_toStartOf="@+id/order_recyclerID"
+        app:layout_constraintTop_toTopOf="@+id/order_recyclerID" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

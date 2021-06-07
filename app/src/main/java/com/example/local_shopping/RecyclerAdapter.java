@@ -70,6 +70,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.Price.setText(product_price + " " + currency);
             holder.ShopName.setText(shop_name);
             Glide.with(context).load(images_list.get(position).getImage_path()).into(holder.imageView);
+        if (images_list.get(position).getOrderable_status() == 0) {
+            holder.orderable_statusImg.setVisibility(View.GONE);
+        }else {
+            holder.orderable_statusImg.setVisibility(View.VISIBLE);
+        }
+
 
 
             holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -81,8 +87,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                             .putExtra("Price", images_list.get(position).getPrice())
                             .putExtra("currency", currency)
                             .putExtra("Location", location)
-                            .putExtra("product_id",String.valueOf(images_list.get(position).getId()))
-                            .putExtra("Product_Name", images_list.get(position).getName());
+                            .putExtra("product_id", String.valueOf(images_list.get(position).getId()))
+                            .putExtra("Product_Name", images_list.get(position).getName())
+                            .putExtra("orderable_status",images_list.get(position).getOrderable_status())
+                            .putExtra("user_name", images_list.get(position).getUser_Name());
                     context.startActivity(intent);
                     MainActivity.getInstance().from_location_search_act=false;
 
@@ -129,13 +137,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
     public static class  MyViewHolder extends  RecyclerView.ViewHolder{
-        ImageView imageView;
+        ImageView imageView,orderable_statusImg;
         TextView Name,Price,ShopName;
         CardView parentLayout;
         Button end_point_btn;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            orderable_statusImg = itemView.findViewById(R.id.orderable_statusImgID);
             imageView=itemView.findViewById(R.id.proIMgID);
             Name=itemView.findViewById(R.id.proNameID);
             Price=itemView.findViewById(R.id.propriceID);

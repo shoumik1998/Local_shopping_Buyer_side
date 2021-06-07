@@ -3,6 +3,7 @@ package com.example.local_shopping;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,23 +13,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.channel.SubscriptionEventListener;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
 
 import java.util.HashMap;
 import java.util.List;
 
+import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Ordered_Details_Activity extends AppCompatActivity {
-    TextView p_nameTxt,p_priceTxt,p_numberTxt,totalTxt,c_nameTxt,c_contactTxt,addressTxt,issueTxt,deliveringTxt;
+    TextView p_nameTxt,p_priceTxt,p_numberTxt,totalTxt,c_nameTxt,c_contactTxt,addressTxt,issueTxt,deliveringTxt,order_statusTxt;
     Button shop_detailsBtn;
     ImageView imageView;
     ApiInterface apiInterface;
-    int no_of_product,price;
+    int no_of_product,price,order_statusInt;
 
 
-    String p_nameStr, p_priceStr, p_numberStr, totalStr, c_nameStr, c_contactStr,
+    String p_nameStr, p_priceStr, p_numberStr, totalStr, c_nameStr, c_contactStr,order_statusStr,
             c_addressStr, issue_dateStr, delivering_dateStr, s_user_nameStr, s_countryStr
             , s_districtStr, s_sub_districtStr, s_regionStr, s_locationStr, s_nameStr, s_contactStr, s_currencyStr;
 
@@ -38,6 +48,10 @@ public class Ordered_Details_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ordered__details_);
+
+        Paper.init(Ordered_Details_Activity.this);
+
+
 
         imageView = findViewById(R.id.order_dialog_imageID);
         p_nameTxt = findViewById(R.id.order_dialog_p_nameID);
@@ -49,6 +63,7 @@ public class Ordered_Details_Activity extends AppCompatActivity {
         addressTxt = findViewById(R.id.order_dialog_addressID);
         issueTxt = findViewById(R.id.order_dialog_issue_dateID);
         deliveringTxt = findViewById(R.id.order_dialog_deliver_dateID);
+        order_statusTxt = findViewById(R.id.order_statusTxtID);
         shop_detailsBtn = findViewById(R.id.order_dialog_shop_dateilsBtnID);
 
 
@@ -59,6 +74,7 @@ public class Ordered_Details_Activity extends AppCompatActivity {
         c_contactStr = getIntent().getStringExtra("c_contact");
         c_addressStr = getIntent().getStringExtra("address");
         issue_dateStr = getIntent().getStringExtra("issue_date");
+        order_statusInt=getIntent().getIntExtra("order_status",0);
         delivering_dateStr = getIntent().getStringExtra("delivering_date");
 
         no_of_product = Integer.valueOf(p_numberStr);
@@ -112,6 +128,16 @@ public class Ordered_Details_Activity extends AppCompatActivity {
         deliveringTxt.setText(delivering_dateStr);
         Glide.with(Ordered_Details_Activity.this).load(getIntent().getStringExtra("imagepath")).into(imageView);
 
+        if (order_statusInt==1) {
+            order_statusTxt.setText("Received");
+        } else if (order_statusInt==0) {
+            order_statusTxt.setText("Order Pending");
+        } else if (order_statusInt==2) {
+            order_statusTxt.setText("Canceled ");
+        } else {
+            order_statusTxt.setText("hmmmm");
+        }
+
         shop_detailsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +165,40 @@ public class Ordered_Details_Activity extends AppCompatActivity {
                         .setPositiveButton("",null)
                         .setNegativeButton("",null)
                         .show();
+            }
+        });
+
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap2");
+        Pusher pusher = new Pusher("f4294e0ad72b1a26ebb2", options);
+
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+
+            }
+        }, ConnectionState.ALL);
+
+        Channel channel = pusher.subscribe(Paper.book().read("phn_email"));
+        channel.bind("delivering-event", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(PusherEvent event) {
+                if (event != null) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            deliveringTxt.setText(event.getData());
+                            Toast.makeText(Ordered_Details_Activity.this, "" ,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
     }
