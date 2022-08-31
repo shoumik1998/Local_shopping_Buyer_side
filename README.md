@@ -1,1 +1,1 @@
-# Local_shopping_Buyer_side
+This app has been developed with Java and name of the app is "Shops Here". With this app, one can order product if he/she is logged in. If not, then he/she can only save product image and can be able to buy that product by going to the shop. The ordering system of the app is fully real time. PUSHER has been used as real time server. 
